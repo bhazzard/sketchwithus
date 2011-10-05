@@ -20,7 +20,30 @@ Now close your terminal and open a new one. The nvm command should be on your pa
 Finally, install node.js:
 
 <pre>
-nvm install v0.5.8
+nvm install v0.4.12
 </pre>
 
 That's it!
+
+# Getting started
+
+Check out the code:
+
+<pre>
+git clone git@github.com:mdellanoce/sketchwithus.git
+</pre>
+
+Install the packages:
+
+<pre>
+cd sketchwithus
+npm install
+</pre>
+
+Run the app:
+
+<pre>
+node app.js
+</pre>
+
+Point your browser to http://localhost:8000
