@@ -1,6 +1,7 @@
 (function() {
 	var canvas = document.getElementById('sketch'),
 		penDown = false,
+		penWidth = 5,
 		offsetX = $(canvas).offset().left,
 		offsetY = $(canvas).offset().top,
 		context;
@@ -15,6 +16,8 @@
 		
 		if (penDown) {
 			context.lineTo(x - offsetX, y - offsetY);
+			context.lineWidth = penWidth;
+			context.lineCap = 'round';
 			context.stroke();
 		}
 	};
