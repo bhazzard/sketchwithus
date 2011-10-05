@@ -23,6 +23,12 @@ Finally, install node.js:
 nvm install v0.4.12
 </pre>
 
+An optional, but recommended, step is also to set your default node.js version. Otherwise, you will have to select which version to use every time you open a new terminal:
+
+<pre>
+nvm alias default v0.4.12
+</pre>
+
 That's it!
 
 # Getting started
