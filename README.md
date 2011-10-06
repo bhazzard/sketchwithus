@@ -52,4 +52,10 @@ Run the app:
 node app.js
 </pre>
 
-Point your browser to http://localhost:8000
+Modify your hosts file:
+
+<pre>
+127.0.0.1       sketchwith.us
+</pre>
+
+Point your browser to http://sketchwith.us:8000
