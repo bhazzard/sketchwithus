@@ -1,5 +1,6 @@
 (function() {
 	var canvas = document.getElementById('sketch'),
+		socket = io.connect('http://localhost'),
 		penDown = false,
 		penWidth = 5,
 		offsetX = $(canvas).offset().left,
@@ -10,7 +11,19 @@
 		context = canvas.getContext('2d');
 	}
 	
-	function mouseMove(event) {
+  socket.on('mousedown', function (data) {
+    mouseDown(data, true);
+  });
+  
+  socket.on('mousemove', function (data) {
+    mouseMove(data, true);
+  });
+  
+  socket.on('mouseup', function (data) {
+    mouseUp(data, true);
+  });
+	
+	function mouseMove(event, silent) {
 		var x = event.pageX,
 			y = event.pageY;
 		
@@ -19,6 +32,10 @@
 			context.lineWidth = penWidth;
 			context.lineCap = 'round';
 			context.stroke();
+		}
+		
+		if (!silent) {
+			socket.emit('mousemove', { pageX: event.pageX, pageY: event.pageY });
 		}
 	};
 	
@@ -32,10 +49,14 @@
 		}
 	};
 	
-	function mouseDown(event) {
+	function mouseDown(event, silent) {
 		if (!penDown) {
 			penDown = true;
 			mouseEnter(event);
+		}
+		
+		if (!silent) {
+			socket.emit('mousedown', { pageX: event.pageX, pageY: event.pageY });
 		}
 	};
 	
@@ -43,10 +64,14 @@
 		context.closePath();
 	};
 	
-	function mouseUp() {
+	function mouseUp(event, silent) {
 		if (penDown) {
 			penDown = false;
 			mouseOut();
+		}
+		
+		if (!silent) {
+			socket.emit('mouseup');
 		}
 	};
 	
