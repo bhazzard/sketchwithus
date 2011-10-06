@@ -4,19 +4,56 @@
     </head>
     <body>
       <div id="fb-root"></div>
+      <div id="fb-login-wrapper" style="display:none;position:absolute;top:5;left:5;">
+        <fb:login-button>
+          Login with Facebook
+        </fb:login-button>
+      </div>        
+      
+      <div id="stage" style="width:400px;margin-left:auto;margin-right:auto;margin-top:250px;">          
+      </div>
+      
+      <script id="profile" type="text/x-jquery-tmpl">
+        <div>
+          <img src="http://graph.facebook.com/${id}/picture" width="48" height="48"  style="float:left; margin-right:10px;"/>
+          <h1> Hello, ${name} </h1>
+          <a href="javascript:void" class="logout">Logout?</a>
+        </div>
+      </script>      
+      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+      <script src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
       <script src="http://connect.facebook.net/en_US/all.js"></script>
-      <script>
-         FB.init({ 
+      <script type="text/javascript">
+        $(document).ready(function(){
+          FB.init({ 
             appId:'183470818398206', 
             cookie:true, 
             status:true, 
             xfbml:true,
             method: 'oauth',
             response_type: 'token'
-         });
-      </script>
-      <fb:login-button>
-        Login with Facebook
-      </fb:login-button>
+          });
+          
+          $("#stage").delegate(".logout", "click", function(){
+            FB.logout(function(response) {
+              window.location.reload();
+            });          
+          });
+          
+          FB.getLoginStatus(function(response) {
+            console.log(response);
+            if (response.status === "connected") {
+              FB.api('/me', function(profile) {
+                $("#profile").tmpl(profile).appendTo("#stage");
+              });
+            } else {
+              $("#fb-login-wrapper").show();
+              FB.Event.subscribe('auth.login', function(auth) {
+                window.location.reload();
+              });              
+            }
+          });                  
+        });         
+      </script>      
     </body>
  </html>
