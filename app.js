@@ -40,13 +40,7 @@ app.listen(8000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 
 io.sockets.on('connection', function (socket) {
-  socket.on('mousedown', function (data) {
-    socket.broadcast.emit('mousedown', data);
-  });
-  socket.on('mousemove', function (data) {
-    socket.broadcast.emit('mousemove', data);
-  });
-  socket.on('mouseup', function (data) {
-    socket.broadcast.emit('mouseup', data);
+  socket.on('data', function (data) {
+    socket.broadcast.emit('data', data);
   });
 });
