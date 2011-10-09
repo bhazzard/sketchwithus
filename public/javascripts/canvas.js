@@ -51,9 +51,9 @@ require(['rect', 'pen'], function(Rect, Pen) {
 		var x = event.pageX - offsetX,
 			y = event.pageY - offsetY;
 		
-		if (pen.down) {
+		if (pen.down()) {
 			pen.stroke(x, y, context);
-			rect.expand(x, y, pen.width / 2);
+			rect.expand(x, y, pen.width() / 2);
 		}
 	};
 	
@@ -61,9 +61,9 @@ require(['rect', 'pen'], function(Rect, Pen) {
 		var x = event.pageX - offsetX,
 			y = event.pageY - offsetY;
 		
-		if (pen.down) {
+		if (pen.down()) {
 			pen.stroke(x, y, context);
-			rect.expand(x, y, pen.width / 2);
+			rect.expand(x, y, pen.width() / 2);
 		}
 	};
 	
@@ -71,16 +71,16 @@ require(['rect', 'pen'], function(Rect, Pen) {
 		var x = event.pageX - offsetX,
 			y = event.pageY - offsetY;
 		
-		if (!pen.down) {
-			pen.down = true;
+		if (!pen.down()) {
+			pen.down(true);
 			rect = new Rect({ left: x, top: y });
 			mouseEnter(event);
 		}
 	};
 	
 	function mouseUp(event) {
-		if (pen.down) {
-			pen.down = false;
+		if (pen.down()) {
+			pen.down(false);
 		}
 	};
 	
