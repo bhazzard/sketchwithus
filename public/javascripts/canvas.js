@@ -1,12 +1,11 @@
-require(['rect'], function(Rect) {
+require(['rect', 'pen'], function(Rect, Pen) {
 	var canvas = document.getElementById('sketch'),
 		transport = document.getElementById('transport'),
 		socket = io.connect('http://localhost'),
 		image = new Image(),
-		penDown = false,
-		penWidth = 5,
 		offsetX = $(canvas).offset().left,
 		offsetY = $(canvas).offset().top,
+		pen = new Pen(5),
 		rect = new Rect(),
 		canvasRect = new Rect({
 			left: 0,
@@ -47,21 +46,14 @@ require(['rect'], function(Rect) {
 			rect = new Rect();
   	}
   };
-  
-  function stroke(x, y) {
-  	context.beginPath();
-  	context.arc(x, y, penWidth/2, 0, 2 * Math.PI, false);
-  	context.fill();
-  	context.closePath();
-  };
 	
 	function mouseMove(event) {
 		var x = event.pageX - offsetX,
 			y = event.pageY - offsetY;
 		
-		if (penDown) {
-			stroke(x, y);
-			rect.expand(x, y, penWidth / 2);
+		if (pen.down) {
+			pen.stroke(x, y, context);
+			rect.expand(x, y, pen.width / 2);
 		}
 	};
 	
@@ -69,9 +61,9 @@ require(['rect'], function(Rect) {
 		var x = event.pageX - offsetX,
 			y = event.pageY - offsetY;
 		
-		if (penDown) {
-			stroke(x, y);
-			rect.expand(x, y, penWidth / 2);
+		if (pen.down) {
+			pen.stroke(x, y, context);
+			rect.expand(x, y, pen.width / 2);
 		}
 	};
 	
@@ -79,21 +71,16 @@ require(['rect'], function(Rect) {
 		var x = event.pageX - offsetX,
 			y = event.pageY - offsetY;
 		
-		if (!penDown) {
-			penDown = true;
+		if (!pen.down) {
+			pen.down = true;
 			rect = new Rect({ left: x, top: y });
 			mouseEnter(event);
 		}
 	};
 	
-	function mouseOut() {
-		context.closePath();
-	};
-	
 	function mouseUp(event) {
-		if (penDown) {
-			penDown = false;
-			mouseOut();
+		if (pen.down) {
+			pen.down = false;
 		}
 	};
 	
@@ -101,8 +88,7 @@ require(['rect'], function(Rect) {
 		mousedown: mouseDown,
 		mouseenter: mouseEnter,
 		mousemove: mouseMove,
-		mouseup: mouseUp,
-		mouseout: mouseOut
+		mouseup: mouseUp
 	});
 	
 	$(document).bind({
