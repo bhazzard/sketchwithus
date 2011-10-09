@@ -1,41 +1,4 @@
-function Rect(rect) {
-	rect = rect || {};
-	this.left = rect.left || Number.MAX_VALUE;
-	this.top = rect.top || Number.MAX_VALUE;
-	this.right = rect.right || rect.left || Number.MIN_VALUE;
-	this.bottom = rect.bottom || rect.top || Number.MIN_VALUE;
-};
-
-Rect.prototype.isDirty = function() {
-	return this.right > this.left && this.bottom > this.top;
-};
-
-Rect.prototype.width = function() {
-	return Math.max(0, this.right - this.left);
-};
-
-Rect.prototype.height = function() {
-	return Math.max(0, this.bottom - this.top);
-};
-
-Rect.prototype.expand = function(x, y, radius) {
-	radius = Math.ceil(radius || 0);
-	this.left = Math.min(x - radius, this.left);
-	this.right = Math.max(x + radius, this.right);
-	this.top = Math.min(y - radius, this.top);
-	this.bottom = Math.max(y + radius, this.bottom);
-};
-
-Rect.prototype.intersect = function(rect) {
-	return new Rect({
-		left: Math.min(this.left, rect.left),
-		top: Math.min(this.top, rect.top),
-		right: Math.min(this.right, rect.right),
-		bottom: Math.min(this.bottom, rect.bottom)
-	});
-};
-
-(function() {
+require(['rect'], function(Rect) {
 	var canvas = document.getElementById('sketch'),
 		transport = document.getElementById('transport'),
 		socket = io.connect('http://localhost'),
@@ -113,8 +76,12 @@ Rect.prototype.intersect = function(rect) {
 	};
 	
 	function mouseDown(event) {
+		var x = event.pageX - offsetX,
+			y = event.pageY - offsetY;
+		
 		if (!penDown) {
 			penDown = true;
+			rect = new Rect({ left: x, top: y });
 			mouseEnter(event);
 		}
 	};
@@ -144,4 +111,4 @@ Rect.prototype.intersect = function(rect) {
 	});
 	
 	setInterval(broadcastData, 100);
-})();
+});
