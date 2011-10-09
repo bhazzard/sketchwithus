@@ -22,7 +22,7 @@ define(function() {
 			points = [start],
 			x, y;
 		
-		if (xDelta > 0 && yDelta > 0) {
+		if (xDelta > 0 || yDelta > 0) {
 			if (xDelta > yDelta) {
 				for (x = start.x + xSign; x !== end.x; x += xSign) {
 					points.push({ x: x, y: interpolateX(x, start, end) });

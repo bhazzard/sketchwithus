@@ -11,6 +11,20 @@ require(['line'], function(Line) {
 		var line = new Line({ x: 1, y: 1 });
 		deepEqual(line.interpolate(), [{ x: 1, y: 1 }], 'point');
 		
+		line = new Line({ x: 1, y: 1 }, { x: 3, y: 1 });
+		deepEqual(line.interpolate(), [
+			{ x: 1, y: 1 },
+			{ x: 2, y: 1 },
+			{ x: 3, y: 1 }
+		], 'horizontal');
+		
+		line = new Line({ x: 1, y: 1 }, { x: 1, y: 3 });
+		deepEqual(line.interpolate(), [
+			{ x: 1, y: 1 },
+			{ x: 1, y: 2 },
+			{ x: 1, y: 3 }
+		], 'horizontal');
+		
 		line = new Line({ x: 1, y: 1 }, { x: 5, y: 3 });
 		deepEqual(line.interpolate(), [
 			{ x: 1, y: 1 },
@@ -18,7 +32,7 @@ require(['line'], function(Line) {
 			{ x: 3, y: 2 },
 			{ x: 4, y: 3 },
 			{ x: 5, y: 3 }
-		], 'horizontal');
+		], 'mostly horizontal');
 		
 		line = new Line({ x: 1, y: 1 }, { x: 3, y: 5 });
 		deepEqual(line.interpolate(), [
@@ -27,7 +41,7 @@ require(['line'], function(Line) {
 			{ x: 2, y: 3 },
 			{ x: 3, y: 4 },
 			{ x: 3, y: 5 }
-		], 'vertical');
+		], 'mostly vertical');
 		
 		line = new Line({ x: 1, y: 1 }, { x: 2, y: 2 });
 		deepEqual(line.interpolate(), [
@@ -42,7 +56,7 @@ require(['line'], function(Line) {
 			{ x: 3, y: 2 },
 			{ x: 2, y: 2 },
 			{ x: 1, y: 1 }
-		], 'reverse horizontal');
+		], 'reverse mostly horizontal');
 		
 		line = new Line({ x: 3, y: 5 }, { x: 1, y: 1 });
 		deepEqual(line.interpolate(), [
@@ -51,6 +65,6 @@ require(['line'], function(Line) {
 			{ x: 2, y: 3 },
 			{ x: 2, y: 2 },
 			{ x: 1, y: 1 }
-		], 'reverse vertical');
+		], 'reverse mostly vertical');
 	});
 });
