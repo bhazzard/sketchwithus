@@ -1,11 +1,10 @@
-require(['rect', 'pen'], function(Rect, Pen) {
+require(['rect', 'artist', 'graphics'], function(Rect, Artist, Graphics) {
 	var canvas = document.getElementById('sketch'),
 		transport = document.getElementById('transport'),
 		socket = io.connect('http://localhost'),
 		image = new Image(),
 		offsetX = $(canvas).offset().left,
 		offsetY = $(canvas).offset().top,
-		pen = new Pen(5),
 		rect = new Rect(),
 		canvasRect = new Rect({
 			left: 0,
@@ -14,11 +13,15 @@ require(['rect', 'pen'], function(Rect, Pen) {
 			bottom: $(canvas).height()
 		}),
 		context,
-		transportContext;
+		transportContext,
+		graphics,
+		artist;
 	
 	if (canvas.getContext && transport.getContext) {
 		context = canvas.getContext('2d');
 		transportContext = transport.getContext('2d');
+		graphics = new Graphics(context);
+		artist = new Artist(graphics);
 	}
 	
   socket.on('data', function (data) {
@@ -51,9 +54,9 @@ require(['rect', 'pen'], function(Rect, Pen) {
 		var x = event.pageX - offsetX,
 			y = event.pageY - offsetY;
 		
-		if (pen.down()) {
-			pen.stroke(x, y, context);
-			rect.expand(x, y, pen.width() / 2);
+		if (artist.pen.down()) {
+			artist.pen.stroke(x, y);
+			rect.expand(x, y, artist.pen.width() / 2);
 		}
 	};
 	
@@ -61,9 +64,9 @@ require(['rect', 'pen'], function(Rect, Pen) {
 		var x = event.pageX - offsetX,
 			y = event.pageY - offsetY;
 		
-		if (pen.down()) {
-			pen.stroke(x, y, context);
-			rect.expand(x, y, pen.width() / 2);
+		if (artist.pen.down()) {
+			artist.pen.stroke(x, y);
+			rect.expand(x, y, artist.pen.width() / 2);
 		}
 	};
 	
@@ -71,16 +74,16 @@ require(['rect', 'pen'], function(Rect, Pen) {
 		var x = event.pageX - offsetX,
 			y = event.pageY - offsetY;
 		
-		if (!pen.down()) {
-			pen.down(true);
+		if (!artist.pen.down()) {
+			artist.pen.down(true);
 			rect = new Rect({ left: x, top: y });
 			mouseEnter(event);
 		}
 	};
 	
 	function mouseUp(event) {
-		if (pen.down()) {
-			pen.down(false);
+		if (artist.pen.down()) {
+			artist.pen.down(false);
 		}
 	};
 	
