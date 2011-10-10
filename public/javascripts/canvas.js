@@ -1,103 +1,63 @@
-require(['rect', 'artist', 'graphics'], function(Rect, Artist, Graphics) {
+require(['artist', 'graphics'], function(Artist, Graphics) {
 	var canvas = document.getElementById('sketch'),
-		transport = document.getElementById('transport'),
 		socket = io.connect('http://localhost'),
-		image = new Image(),
 		offsetX = $(canvas).offset().left,
 		offsetY = $(canvas).offset().top,
-		rect = new Rect(),
-		canvasRect = new Rect({
-			left: 0,
-			top: 0,
-			right: $(canvas).width(),
-			bottom: $(canvas).height()
-		}),
 		context,
-		transportContext,
 		graphics,
 		artist;
 	
-	if (canvas.getContext && transport.getContext) {
+	if (canvas.getContext) {
 		context = canvas.getContext('2d');
-		transportContext = transport.getContext('2d');
 		graphics = new Graphics(context);
 		artist = new Artist(graphics);
 	}
 	
-  socket.on('data', function (data) {
-  	image.onload = function() {
-			context.drawImage(this, data.x, data.y);
-		};
-		image.src = data.image;
-  });
-  
-  function broadcastData() {
-  	var intersection = rect.intersect(canvasRect);
-  	if (intersection.isDirty()) {
-			transport.width = intersection.width();
-			transport.height = intersection.height();
-			
-			var imageData = context.getImageData(intersection.left, intersection.top, transport.width, transport.height);
-			transportContext.putImageData(imageData, 0, 0);
-			
-			socket.emit('data', {
-				x: intersection.left,
-				y: intersection.top,
-				image: transport.toDataURL()
-			});
-			
-			rect = new Rect();
-  	}
-  };
-	
-	function mouseMove(event) {
+	function mousemove(event) {
 		var x = event.pageX - offsetX,
 			y = event.pageY - offsetY;
 		
-		if (artist.pen.down()) {
-			artist.pen.stroke(x, y);
-			rect.expand(x, y, artist.pen.width() / 2);
-		}
+		artist.mousemove(x, y);
 	};
 	
-	function mouseEnter(event) {
+	function mousedown(event) {
 		var x = event.pageX - offsetX,
 			y = event.pageY - offsetY;
 		
-		if (artist.pen.down()) {
-			artist.pen.stroke(x, y);
-			rect.expand(x, y, artist.pen.width() / 2);
-		}
+		artist.mousedown(x, y);
 	};
 	
-	function mouseDown(event) {
+	function mouseup(event) {
 		var x = event.pageX - offsetX,
 			y = event.pageY - offsetY;
 		
-		if (!artist.pen.down()) {
-			artist.pen.down(true);
-			rect = new Rect({ left: x, top: y });
-			mouseEnter(event);
-		}
+		artist.mouseup(x, y);
 	};
 	
-	function mouseUp(event) {
-		if (artist.pen.down()) {
-			artist.pen.down(false);
-		}
+	function mouseout(event) {
+		var x = event.pageX - offsetX,
+			y = event.pageY - offsetY;
+		
+		artist.mouseout(x, y);
+	};
+	
+	function mouseenter(event) {
+		var x = event.pageX - offsetX,
+			y = event.pageY - offsetY;
+		
+		artist.mouseenter(x, y);
 	};
 	
 	$(canvas).bind({
-		mousedown: mouseDown,
-		mouseenter: mouseEnter,
-		mousemove: mouseMove,
-		mouseup: mouseUp
+		mousedown: mousedown,
+		mouseenter: mouseenter,
+		mousemove: mousemove,
+		mouseup: mouseup,
+		mouseout: mouseout
 	});
 	
 	$(document).bind({
-		mousedown: mouseDown,
-		mouseup: mouseUp
+		mousedown: mousedown,
+		mouseup: mouseup
 	});
-	
-	setInterval(broadcastData, 100);
 });
