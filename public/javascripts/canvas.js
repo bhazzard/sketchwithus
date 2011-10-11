@@ -1,3 +1,23 @@
+function BroadcastingProxy(message, socket, target) {
+	function wrap(methodName, method) {
+		return function() {
+			var args = $.makeArray(arguments);
+			socket.emit(message, {
+				method: methodName,
+				arguments: args
+			});
+			return method.apply(target, args);
+		};
+	};
+	var key, value;
+	for (key in target) {
+		value = target[key]; 
+		if ($.isFunction(value)) {
+			this[key] = wrap(key, value);
+		}
+	}
+};
+
 require(['artist', 'graphics'], function(Artist, Graphics) {
 	var canvas = document.getElementById('sketch'),
 		socket = io.connect('http://localhost'),
@@ -5,13 +25,33 @@ require(['artist', 'graphics'], function(Artist, Graphics) {
 		offsetY = $(canvas).offset().top,
 		context,
 		graphics,
-		artist;
+		artist,
+		artists = {};
 	
 	if (canvas.getContext) {
 		context = canvas.getContext('2d');
 		graphics = new Graphics(context);
 		artist = new Artist(graphics);
+		artist = new BroadcastingProxy('draw', socket, artist);
 	}
+	
+	socket.emit('join');
+	
+	socket.on('join', function(ids) {
+		for (var i = 0; i < ids.length; i++) {
+			artists[ids[i]] = new Artist(graphics);
+		}
+	});
+	
+	socket.on('leave', function(id) {
+		delete artists[id];
+	});
+	
+	socket.on('draw', function(data) {
+		var a = artists[data.id],
+			method = a[data.invocation.method];
+		method.apply(a, data.invocation.arguments);
+	});
 	
 	function mousemove(event) {
 		var x = event.pageX - offsetX,
