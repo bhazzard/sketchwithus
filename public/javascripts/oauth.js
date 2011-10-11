@@ -1,3 +1,15 @@
+function user(profile){
+	var obj = {};
+	obj.img = $("<img />")
+		.attr("src", "http://graph.facebook.com/" + profile.id + "/picture")
+		.attr("width", "36")
+		.attr("width", "36")
+		.addClass("profile-image");
+	obj.name = $("<h3 />")
+		.text(profile.name);
+	return obj;
+};
+
 $(document).ready(function(){
   FB.init({ 
     appId:'183470818398206', 
@@ -17,42 +29,27 @@ $(document).ready(function(){
   FB.getLoginStatus(function(response) {
     if (response.status === "connected") {
       FB.api('/me', function(profile) {
-				var img = $("<img />")
-					.attr("src", "http://graph.facebook.com/" + profile.id + "/picture")
-					.attr("width", "36")
-					.attr("width", "36")
-					.addClass("profile-image");
-				var n = $("<h3 />")
-					.text(profile.name);
+				var u = user(profile);
 				var logout = $("<a />")
 					.attr("href", "javascript:void(0)")
 					.text("Logout?")
 					.addClass("logout");
 				$("<div />")
 					.attr("id", "user")
-					.append(img)
-					.append(n)
+					.append(u.img)
+					.append(u.name)
 					.append(logout)
 					.prependTo("body");
       });
  
 			FB.api('/me/friends?access_token=' + response.session.access_token, function(friends){
-				$("<h2 />")
-					.text(friends.data.length + " Friends")
-					.appendTo("#friends");
-
+				$("<h2 />").text(friends.data.length + " Friends").appendTo("#friends");
 				$.each(friends.data, function(i, friend){
-					var img = $("<img />")
-						.attr("src", "http://graph.facebook.com/" + friend.id + "/picture")
-						.attr("width", "36")
-						.attr("width", "36")
-						.addClass("profile-image");
-					var n = $("<h3 />")
-						.text(friend.name);
+					var u = user(friend);
 					var clear = $("<div />").css("clear:both");
 					$("<li />")
-						.append(img)
-						.append(n)
+						.append(u.img)
+						.append(u.name)
 						.append(clear)
 						.appendTo("#friends");
 				});
