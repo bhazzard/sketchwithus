@@ -13,8 +13,8 @@
 }
 
 #user {
-	float : right;
-	width : 200px;
+  float : right;
+  width : 200px;
 }
 
 .profile-image {
@@ -23,6 +23,6 @@
 }
 
 ul#friends {
-	list-style-type : none;
+  list-style-type : none;
 }
 
