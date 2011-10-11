@@ -1,5 +1,16 @@
 h1= title
 p Welcome to #{title}
   ul
-    li: a(href='/canvas.html') Canvas Demo
     li: a(href='/oauthtests.html') OAuth Demo
+
+  label
+    | Create a new sketchpad:
+    input(name="pad", type="text")
+  input(type="submit", val="Go!")
+
+  script
+    $(function() {
+      $("input[type=submit]").click(function() {
+        window.location = "/sketch/" + $("input[name=pad]").val();
+      });
+    });
