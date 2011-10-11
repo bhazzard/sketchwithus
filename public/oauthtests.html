@@ -7,17 +7,22 @@
       <script src="http://connect.facebook.net/en_US/all.js"></script>
       <script src="/javascripts/oauth.js"></script>            
     </head>
-    <body>
-      <div id="fb-root"></div>
-      <div id="fb-login-wrapper">
-        <fb:login-button>
-          Login with Facebook
-        </fb:login-button>
-      </div>        
-      
-      <div id="stage">    
-				<ul id="friends">
-				</ul>      
+    <body style="padding:0">
+      <div id="fb-root"></div>              
+      <div id="stage">
+        <div id="authentication-panel">
+          <div id="login-panel">
+            <fb:login-button>
+              Login with Facebook
+            </fb:login-button>
+          </div>
+          <div id="registration-panel">
+            <fb:registration fields="[{'name':'name'}, {'name':'email'}]" redirect-uri="http://sketchwith.us:8000/oauthtests.html">
+            </fb:registration>
+          </div>
+        </div>
+        <ul id="friends">
+        </ul>      
       </div>
     </body>
  </html>
