@@ -1,6 +1,8 @@
 require(['artist', 'graphics', 'proxy'], function(Artist, Graphics, Proxy) {
+	var pad_name = $('#pad').attr('val');
+
 	var canvas = document.getElementById('sketch'),
-		socket = io.connect('http://localhost'),
+		socket = io.connect('http://localhost/' + pad_name),
 		offsetX = $(canvas).offset().left,
 		offsetY = $(canvas).offset().top,
 		context,

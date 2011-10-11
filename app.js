@@ -36,29 +36,37 @@ app.get('/', function(req, res){
   });
 });
 
+app.get('/sketch/:pad', function(req, res){
+	var pad_artists = [];
+
+	io.of('/' + req.params.pad).on('connection', function(socket) {
+		var id = socket.id;
+
+		socket.on('join', function (data) {
+			socket.broadcast.emit('join', [id]);
+			socket.emit('join', pad_artists);
+			pad_artists.push(id);
+		});
+
+		socket.on('draw', function(data) {
+			socket.broadcast.emit('draw', { id: id, invocation: data });
+		});
+
+		socket.on('disconnect', function () {
+			socket.broadcast.emit('leave', id);
+
+			var a = pad_artists.indexOf(id);
+			if (a >= 0) {
+				pad_artists.splice(a, 1);
+			}
+		});
+	});
+
+	res.render('pad', {
+		title: 'SketchWith.Us - ' + req.params.pad,
+		pad: req.params.pad
+	});
+});
+
 app.listen(8000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
-
-//TODO: store somewhere better
-var artists = [];
-
-io.sockets.on('connection', function (socket) {
-	var id = socket.id;
-	
-	socket.on('join', function (data) {
-    socket.broadcast.emit('join', [id]);
-    socket.emit('join', artists);
-    artists.push(id);
-  });
-  socket.on('draw', function (data) {
-    socket.broadcast.emit('draw', { id: id, invocation: data });
-  });
-  socket.on('disconnect', function () {
-    socket.broadcast.emit('leave', id);
-    
-    var a = artists.indexOf(id);
-    if (a >= 0) {
-    	artists.splice(a, 1);
-    }
-  });
-});
