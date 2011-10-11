@@ -59,3 +59,6 @@ Modify your hosts file:
 </pre>
 
 Point your browser to http://sketchwith.us:8000
+
+Optionally, open another browser instance and point it to the same location. Draw on the canvas,
+your drawing should show up in the other browser window in real-time.

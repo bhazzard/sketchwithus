@@ -1,100 +1,89 @@
-require(['rect', 'pen'], function(Rect, Pen) {
+require(['artist', 'graphics', 'proxy'], function(Artist, Graphics, Proxy) {
 	var canvas = document.getElementById('sketch'),
-		transport = document.getElementById('transport'),
 		socket = io.connect('http://localhost'),
-		image = new Image(),
 		offsetX = $(canvas).offset().left,
 		offsetY = $(canvas).offset().top,
-		pen = new Pen(5),
-		rect = new Rect(),
-		canvasRect = new Rect({
-			left: 0,
-			top: 0,
-			right: $(canvas).width(),
-			bottom: $(canvas).height()
-		}),
 		context,
-		transportContext;
+		graphics,
+		artist,
+		artists = {};
 	
-	if (canvas.getContext && transport.getContext) {
+	if (canvas.getContext) {
 		context = canvas.getContext('2d');
-		transportContext = transport.getContext('2d');
+		graphics = new Graphics(context);
+		artist = new Artist(graphics);
+		artist = new Proxy(artist, function(invocation) {
+			socket.emit('draw', {
+				method: invocation.method,
+				arguments: invocation.arguments
+			});
+			invocation.proceed();
+		});
 	}
 	
-  socket.on('data', function (data) {
-  	image.onload = function() {
-			context.drawImage(this, data.x, data.y);
-		};
-		image.src = data.image;
-  });
-  
-  function broadcastData() {
-  	var intersection = rect.intersect(canvasRect);
-  	if (intersection.isDirty()) {
-			transport.width = intersection.width();
-			transport.height = intersection.height();
-			
-			var imageData = context.getImageData(intersection.left, intersection.top, transport.width, transport.height);
-			transportContext.putImageData(imageData, 0, 0);
-			
-			socket.emit('data', {
-				x: intersection.left,
-				y: intersection.top,
-				image: transport.toDataURL()
-			});
-			
-			rect = new Rect();
-  	}
-  };
+	socket.emit('join');
 	
-	function mouseMove(event) {
+	socket.on('join', function(ids) {
+		for (var i = 0; i < ids.length; i++) {
+			artists[ids[i]] = new Artist(graphics);
+		}
+	});
+	
+	socket.on('leave', function(id) {
+		delete artists[id];
+	});
+	
+	socket.on('draw', function(data) {
+		var a = artists[data.id],
+			method = a[data.invocation.method];
+		method.apply(a, data.invocation.arguments);
+	});
+	
+	function mousemove(event) {
 		var x = event.pageX - offsetX,
 			y = event.pageY - offsetY;
 		
-		if (pen.down()) {
-			pen.stroke(x, y, context);
-			rect.expand(x, y, pen.width() / 2);
-		}
+		artist.mousemove(x, y);
 	};
 	
-	function mouseEnter(event) {
+	function mousedown(event) {
 		var x = event.pageX - offsetX,
 			y = event.pageY - offsetY;
 		
-		if (pen.down()) {
-			pen.stroke(x, y, context);
-			rect.expand(x, y, pen.width() / 2);
-		}
+		artist.mousedown(x, y);
 	};
 	
-	function mouseDown(event) {
+	function mouseup(event) {
 		var x = event.pageX - offsetX,
 			y = event.pageY - offsetY;
 		
-		if (!pen.down()) {
-			pen.down(true);
-			rect = new Rect({ left: x, top: y });
-			mouseEnter(event);
-		}
+		artist.mouseup(x, y);
 	};
 	
-	function mouseUp(event) {
-		if (pen.down()) {
-			pen.down(false);
-		}
+	function mouseout(event) {
+		var x = event.pageX - offsetX,
+			y = event.pageY - offsetY;
+		
+		artist.mouseout(x, y);
+	};
+	
+	function mouseenter(event) {
+		var x = event.pageX - offsetX,
+			y = event.pageY - offsetY;
+		
+		artist.mouseenter(x, y);
 	};
 	
 	$(canvas).bind({
-		mousedown: mouseDown,
-		mouseenter: mouseEnter,
-		mousemove: mouseMove,
-		mouseup: mouseUp
+		mousedown: mousedown,
+		mouseenter: mouseenter,
+		mousemove: mousemove,
+		mouseup: mouseup,
+		mouseout: mouseout
 	});
 	
 	$(document).bind({
-		mousedown: mouseDown,
-		mouseup: mouseUp
+		mousedown: mousedown,
+		mouseup: mouseup
 	});
-	
-	setInterval(broadcastData, 100);
 });

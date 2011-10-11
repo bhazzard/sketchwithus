@@ -1,8 +1,7 @@
 define(['line'], function(Line) {
-	var TWO_PI = 2 * Math.PI;
-
-	function Pen(width) {
-		this._width = width;
+	function Pen(graphics) {
+		this._graphics = graphics;
+		this._width = 5;
 		this._down = false;
 	};
 	
@@ -26,19 +25,18 @@ define(['line'], function(Line) {
 		}
 	};
 
-	Pen.prototype.stroke = function(x, y, context) {
+	Pen.prototype.stroke = function(x, y) {
 		if (this._down) {
-			var point = { x: x, y: y },
+			var graphics = this._graphics,
+				point = { x: x, y: y },
 				line = new Line(point, this._last),
 				points = line.interpolate(),
+				radius = this._width / 2,
 				len = points.length,
 				i;
 			
 			for (i = 0; i < len; i++) {
-				context.beginPath();
-				context.arc(points[i].x, points[i].y, this._width/2, 0, TWO_PI, false);
-				context.fill();
-				context.closePath();
+				graphics.circle(points[i].x, points[i].y, radius);
 			}
 			
 			this._last = point;
