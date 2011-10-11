@@ -1,20 +1,26 @@
-#fb-login-wrapper {
-  display:none;
-  position:absolute;
-  top:5;
-  left:5;
-}
-
 #stage {
-  width:400px;
+  width:800px;
   margin-left:auto;
   margin-right:auto;
-  margin-top:100px;
 }
 
-#user {
+#authentication-panel {
+  display:none;
+}
+
+#login-panel {
   float : right;
-  width : 200px;
+  margin-top : 0px;
+  margin-bottom : 20px;
+}
+
+#registration-panel {
+  clear : both;
+}
+
+#user-box {
+  float : right;
+  width : 218px;
 }
 
 .profile-image {
@@ -26,3 +32,12 @@ ul#friends {
   list-style-type : none;
 }
 
+.user {
+  clear : both;
+  font-weight : bolder;
+  font-size : 1.6m;
+}
+
+.logout-link {
+  margin-left : 5px;
+}

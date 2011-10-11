@@ -5,7 +5,7 @@ function user(profile){
     .attr("width", "36")
     .attr("width", "36")
     .addClass("profile-image");
-  obj.name = $("<h3 />")
+  obj.name = $("<span />")
     .text(profile.name);
   return obj;
 };
@@ -20,7 +20,7 @@ $(document).ready(function(){
     response_type: 'token'
   });
   
-  $(document).delegate(".logout", "click", function(){
+  $(document).delegate(".logout-link", "click", function(){
     FB.logout(function(response) {
       window.location.reload();
     });          
@@ -32,14 +32,17 @@ $(document).ready(function(){
         var u = user(profile);
         var logout = $("<a />")
           .attr("href", "javascript:void(0)")
-          .text("Logout?")
-          .addClass("logout");
+          .text("(logout)")
+          .addClass("logout-link");
+        var panel = $("#authentication-panel").empty();
         $("<div />")
-          .attr("id", "user")
+          .attr("id", "user-box")
+          .addClass("user")
           .append(u.img)
           .append(u.name)
           .append(logout)
-          .prependTo("body");
+          .appendTo(panel);
+        panel.show();
       });
 
       FB.api('/me/friends?access_token=' + response.session.access_token, function(friends){
@@ -48,6 +51,7 @@ $(document).ready(function(){
           var u = user(friend);
           var clear = $("<div />").css("clear:both");
           $("<li />")
+            .addClass("user")
             .append(u.img)
             .append(u.name)
             .append(clear)
@@ -55,7 +59,7 @@ $(document).ready(function(){
         });
       });
     } else {
-      $("#fb-login-wrapper").show();
+      $("#authentication-panel").show();
       FB.Event.subscribe('auth.login', function(auth) {
         window.location.reload();
       });              
