@@ -16,15 +16,29 @@
         </fb:login-button>
       </div>        
       
-      <div id="stage">          
+      <div id="stage">    
+				<ul id="friends">
+				</ul>      
       </div>
+
+      <script id="title" type="text/x-jquery-tmpl">
+       	<h2>${count} Friends</h2>
+      </script>
       
       <script id="profile" type="text/x-jquery-tmpl">
-        <div>
-          <img src="http://graph.facebook.com/${id}/picture" class="profile-image" width="48" height="48" />
-          <h1> Hello, ${name} </h1>
+        <div id="user">
+          <img src="http://graph.facebook.com/${id}/picture" class="profile-image" width="36" height="36" />
+          <h3> ${name} </h3>
           <a href="javascript:void" class="logout">Logout?</a>
         </div>
-      </script>         
+      </script>
+
+      <script id="generic" type="text/x-jquery-tmpl">
+        <li>
+					<img src="http://graph.facebook.com/${id}/picture" class="profile-image" width="36" height="36" />
+          <h2> ${name} </h2>
+					<div style="clear:both"></div>
+        </li>
+      </script>
     </body>
  </html>
