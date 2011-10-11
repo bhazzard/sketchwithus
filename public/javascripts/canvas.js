@@ -1,24 +1,4 @@
-function BroadcastingProxy(message, socket, target) {
-	function wrap(methodName, method) {
-		return function() {
-			var args = $.makeArray(arguments);
-			socket.emit(message, {
-				method: methodName,
-				arguments: args
-			});
-			return method.apply(target, args);
-		};
-	};
-	var key, value;
-	for (key in target) {
-		value = target[key]; 
-		if ($.isFunction(value)) {
-			this[key] = wrap(key, value);
-		}
-	}
-};
-
-require(['artist', 'graphics'], function(Artist, Graphics) {
+require(['artist', 'graphics', 'proxy'], function(Artist, Graphics, Proxy) {
 	var canvas = document.getElementById('sketch'),
 		socket = io.connect('http://localhost'),
 		offsetX = $(canvas).offset().left,
@@ -32,7 +12,13 @@ require(['artist', 'graphics'], function(Artist, Graphics) {
 		context = canvas.getContext('2d');
 		graphics = new Graphics(context);
 		artist = new Artist(graphics);
-		artist = new BroadcastingProxy('draw', socket, artist);
+		artist = new Proxy(artist, function(invocation) {
+			socket.emit('draw', {
+				method: invocation.method,
+				arguments: invocation.arguments
+			});
+			invocation.proceed();
+		});
 	}
 	
 	socket.emit('join');
