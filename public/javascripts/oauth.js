@@ -17,13 +17,44 @@ $(document).ready(function(){
   FB.getLoginStatus(function(response) {
     if (response.status === "connected") {
       FB.api('/me', function(profile) {
-        $("#profile").tmpl(profile).prependTo("body");
+				var img = $("<img />")
+					.attr("src", "http://graph.facebook.com/" + profile.id + "/picture")
+					.attr("width", "36")
+					.attr("width", "36")
+					.addClass("profile-image");
+				var n = $("<h3 />")
+					.text(profile.name);
+				var logout = $("<a />")
+					.attr("href", "javascript:void(0)")
+					.text("Logout?")
+					.addClass("logout");
+				$("<div />")
+					.attr("id", "user")
+					.append(img)
+					.append(n)
+					.append(logout)
+					.prependTo("body");
       });
  
 			FB.api('/me/friends?access_token=' + response.session.access_token, function(friends){
-				$("#title").tmpl({count : friends.data.length}).appendTo("#friends");
+				$("<h2 />")
+					.text(friends.data.length + " Friends")
+					.appendTo("#friends");
+
 				$.each(friends.data, function(i, friend){
-					$("#generic").tmpl(friend).appendTo("#friends");
+					var img = $("<img />")
+						.attr("src", "http://graph.facebook.com/" + friend.id + "/picture")
+						.attr("width", "36")
+						.attr("width", "36")
+						.addClass("profile-image");
+					var n = $("<h3 />")
+						.text(friend.name);
+					var clear = $("<div />").css("clear:both");
+					$("<li />")
+						.append(img)
+						.append(n)
+						.append(clear)
+						.appendTo("#friends");
 				});
 			});
     } else {
