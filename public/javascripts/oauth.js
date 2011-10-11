@@ -38,6 +38,7 @@ $(document).ready(function(){
         $("<div />")
           .attr("id", "user-box")
           .addClass("user")
+          .addClass("important")
           .append(u.img)
           .append(u.name)
           .append(logout)
@@ -46,17 +47,32 @@ $(document).ready(function(){
       });
 
       FB.api('/me/friends?access_token=' + response.session.access_token, function(friends){
-        $("<h2 />").text(friends.data.length + " Friends").appendTo("#friends");
-        $.each(friends.data, function(i, friend){
-          var u = user(friend);
-          var clear = $("<div />").css("clear:both");
-          $("<li />")
-            .addClass("user")
-            .append(u.img)
-            .append(u.name)
-            .append(clear)
-            .appendTo("#friends");
-        });
+        $("<a />")
+          .text(friends.data.length + " friends")
+          .attr("href", "javascript:void(0)")
+          .addClass("important")
+          .addClass("hide-friends")
+          .prependTo("#friends-panel")
+          .click(function(){
+            var node = $(this);
+            if(node.hasClass("show-friends")){
+              node.removeClass("show-friends").addClass("hide-friends");
+              $("#friends").empty();
+            } else {
+              node.removeClass("hide-friends").addClass("show-friends");
+              $.each(friends.data, function(i, friend){
+                var u = user(friend);
+                var clear = $("<div />").css("clear:both");
+                $("<li />")
+                  .addClass("user")
+                  .addClass("important")
+                  .append(u.img)
+                  .append(u.name)
+                  .append(clear)
+                  .appendTo("#friends");
+              });
+            }
+          });
       });
     } else {
       $("#authentication-panel").show();
