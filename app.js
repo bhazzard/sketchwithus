@@ -72,7 +72,7 @@ app.get('/', function(req, res){
 
 			socket.on('join', function (data) {
 				socket.broadcast.emit('join', [artist]);
-				socket.emit('join', req.sketchpad.artists);
+				socket.emit('join', req.sketchpad.artists());
 				req.sketchpad.add_artist(artist);
 			});
 
