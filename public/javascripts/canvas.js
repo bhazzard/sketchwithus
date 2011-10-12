@@ -91,7 +91,7 @@ require(['artist', 'graphics', 'proxy'], function(Artist, Graphics, Proxy) {
 
 	$(function() {
 		$('#ink').ColorPicker({
-			color: '#FFFFFF',
+			color: '#000000',
 			flat: true,
 			onChange: function (hsb, hex, rgb) {
 				artist.setColor(hex);
