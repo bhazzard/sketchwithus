@@ -2,7 +2,7 @@ function user(profile){
   var obj = {};
   obj.img = $("<img />")
     .attr("src", "http://graph.facebook.com/" + profile.id + "/picture")
-    .attr("width", "36")
+    .attr("height", "36")
     .attr("width", "36")
     .addClass("profile-image");
   obj.name = $("<span />")
@@ -46,9 +46,16 @@ $(document).ready(function(){
         panel.show();
       });
 
-      FB.api('/me/friends?access_token=' + response.session.access_token, function(friends){
+      var q = "SELECT uid, name FROM user WHERE " +
+              "online_presence IN ('active', 'idle') " +
+              "AND uid IN " +
+              "( " +
+              " SELECT uid2 FROM friend WHERE uid1 = me() " +
+              ")";
+
+      FB.api({method: 'fql.query', query: q}, function(friends){
         $("<a />")
-          .text(friends.data.length + " friends")
+          .text(friends.length + " friends")
           .attr("href", "javascript:void(0)")
           .addClass("important")
           .addClass("hide-friends")
@@ -60,8 +67,8 @@ $(document).ready(function(){
               $("#friends").empty();
             } else {
               node.removeClass("hide-friends").addClass("show-friends");
-              $.each(friends.data, function(i, friend){
-                var u = user(friend);
+              $.each(friends, function(i, friend){
+                var u = user({id : friend.uid, name : friend.name});
                 var clear = $("<div />").css("clear:both");
                 $("<li />")
                   .addClass("user")

@@ -1,3 +1,7 @@
+body {
+  padding : 0px;
+}
+
 #stage {
   width:800px;
   margin-left:auto;
@@ -42,5 +46,5 @@ ul#friends {
 
 .important {
   font-weight : bolder;
-  font-size : 1.6m;
+  font-size : 1.1em;
 }
