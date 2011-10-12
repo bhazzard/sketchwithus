@@ -34,10 +34,13 @@ ul#friends {
 
 .user {
   clear : both;
-  font-weight : bolder;
-  font-size : 1.6m;
 }
 
 .logout-link {
   margin-left : 5px;
+}
+
+.important {
+  font-weight : bolder;
+  font-size : 1.6m;
 }

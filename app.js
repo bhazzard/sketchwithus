@@ -1,8 +1,7 @@
 /**
  * Module dependencies.
  */
-var sys = require('sys'),
-    uuid = require('uuid-lib'),
+var uuid = require('uuid-lib'),
     express = require('express'),
     app = module.exports = express.createServer(),
     io = require('socket.io').listen(app);
@@ -27,10 +26,6 @@ app.configure('production', function(){
 });
 
 // Routes
-
-app.error(function(err, req, res, next) {
-	res.redirect('/');
-});
 
 app.get('/', function(req, res){
   res.render('index', {
