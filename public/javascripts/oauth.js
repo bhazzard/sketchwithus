@@ -1,14 +1,51 @@
-function user(profile){
-  var obj = {};
-  obj.img = $("<img />")
-    .attr("src", "http://graph.facebook.com/" + profile.id + "/picture")
+function userImageTemplate(userId){
+  return $("<img />")
+    .attr("src", "http://graph.facebook.com/" + userId + "/picture")
     .attr("height", "36")
     .attr("width", "36")
-    .addClass("profile-image");
-  obj.name = $("<span />")
-    .text(profile.name);
-  return obj;
+    .addClass("profile-image");  
 };
+
+function userNameTemplate(userName){
+  return $("<span />")
+    .text(userName);
+};
+
+function logoutTemplate() {
+  return $("<a />")
+    .attr("href", "javascript:void(0)")
+    .text("(logout)")
+    .addClass("logout-link");
+};
+
+function userBoxTemplate(profile){  
+  return $("<div />")
+    .attr("id", "user-box")
+    .addClass("user")
+    .addClass("important")
+    .append(userImageTemplate(profile.id))
+    .append(userNameTemplate(profile.name))
+    .append(logoutTemplate());
+};
+
+function inviteTemplate(friendId){
+  return $("<a />")
+    .attr("href", "javascript:void(0)")
+    .attr("fb-id", friendId)
+    .text("invite");
+};
+
+function friendTemplate(friend){
+  var clear = $("<div />").css("clear:both");                  
+  return $("<li />")
+    .addClass("user")
+    .addClass("important")
+    .append(userImageTemplate(friend.uid))
+    .append(userNameTemplate(friend.name))
+    .append("<br />")
+    .append(inviteTemplate(friend.uid))
+    .append(clear);
+}; 
 
 $(document).ready(function(){
   FB.init({ 
@@ -29,21 +66,10 @@ $(document).ready(function(){
   FB.getLoginStatus(function(response) {
     if (response.status === "connected") {
       FB.api('/me', function(profile) {
-        var u = user(profile);
-        var logout = $("<a />")
-          .attr("href", "javascript:void(0)")
-          .text("(logout)")
-          .addClass("logout-link");
-        var panel = $("#authentication-panel").empty();
-        $("<div />")
-          .attr("id", "user-box")
-          .addClass("user")
-          .addClass("important")
-          .append(u.img)
-          .append(u.name)
-          .append(logout)
-          .appendTo(panel);
-        panel.show();
+        $("#authentication-panel")
+          .empty()
+          .append(userBoxTemplate(profile))
+          .show();
       });
 
       var q = "SELECT uid, name FROM user WHERE " +
@@ -54,31 +80,12 @@ $(document).ready(function(){
               ")";
 
       FB.api({method: 'fql.query', query: q}, function(friends){
-        $("<a />")
+        $("<div />")
           .text(friends.length + " friends")
-          .attr("href", "javascript:void(0)")
           .addClass("important")
-          .addClass("hide-friends")
-          .prependTo("#friends-panel")
-          .click(function(){
-            var node = $(this);
-            if(node.hasClass("show-friends")){
-              node.removeClass("show-friends").addClass("hide-friends");
-              $("#friends").empty();
-            } else {
-              node.removeClass("hide-friends").addClass("show-friends");
-              $.each(friends, function(i, friend){
-                var u = user({id : friend.uid, name : friend.name});
-                var clear = $("<div />").css("clear:both");
-                $("<li />")
-                  .addClass("user")
-                  .addClass("important")
-                  .append(u.img)
-                  .append(u.name)
-                  .append(clear)
-                  .appendTo("#friends");
-              });
-            }
+          .prependTo("#friends-panel");
+          $.each(friends, function(i, friend){
+              $("#friends").append(friendTemplate(friend));
           });
       });
     } else {

@@ -34,6 +34,13 @@ body {
 
 ul#friends {
   list-style-type : none;
+  margin : 0;
+  padding : 0;
+}
+
+ul#friends li {
+  margin : 2px;
+  padding : 2px;
 }
 
 .user {
