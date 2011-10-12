@@ -27,7 +27,7 @@ require(['artist', 'graphics', 'proxy'], function(Artist, Graphics, Proxy) {
 	
 	socket.on('join', function(ids) {
 		for (var i = 0; i < ids.length; i++) {
-			artists[ids[i]] = new Artist(graphics);
+			artists[ids[i]] = new Artist(new Graphics(context));
 		}
 	});
 	
@@ -87,5 +87,15 @@ require(['artist', 'graphics', 'proxy'], function(Artist, Graphics, Proxy) {
 	$(document).bind({
 		mousedown: mousedown,
 		mouseup: mouseup
+	});
+
+	$(function() {
+		$('#ink').ColorPicker({
+			color: '#FFFFFF',
+			flat: true,
+			onChange: function (hsb, hex, rgb) {
+				artist.setColor(hex);
+			}
+		});
 	});
 });

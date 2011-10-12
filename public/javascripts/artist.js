@@ -2,7 +2,11 @@ define(['pen'], function(Pen) {
 	function Artist(graphics) {
 		this._pen = new Pen(graphics);
 	};
-	
+
+	Artist.prototype.setColor = function(hex) {
+		this._pen.setColor(hex);
+	}
+
 	Artist.prototype.mousedown = function(x, y) {
 		var pen = this._pen;
 		if (!pen.down()) {
