@@ -13,3 +13,8 @@ canvas
 {
 	border: 1px solid black;
 }
+
+#sketchState
+{
+  display:none;
+}

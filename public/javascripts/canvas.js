@@ -23,6 +23,8 @@ require(['artist', 'graphics', 'proxy'], function(Artist, Graphics, Proxy) {
 		});
 	}
 	
+	context.drawImage(document.getElementById('sketchState'), 0, 0);
+	
 	socket.emit('join');
 	
 	socket.on('join', function(ids) {

@@ -5,7 +5,7 @@ This guide is written assuming you are developing on Ubuntu. The first step is t
 <pre>
 sudo apt-get update
 sudo apt-get upgrade
-sudo apt-get install build-essential python-software-properties libssl-dev libreadline-dev git-core curl
+sudo apt-get install build-essential python-software-properties libssl-dev libreadline-dev git-core curl libcairo2-dev
 </pre>
 
 Next, install NVM:
