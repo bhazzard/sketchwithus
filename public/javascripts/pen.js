@@ -7,7 +7,6 @@ define(['line'], function(Line) {
 
 	Pen.prototype.setColor = function(hex) {
 		this._graphics.setFill(hex);
-		this._graphics.setStroke(hex);
 	}
 	
 	Pen.prototype.width = function(width) {
