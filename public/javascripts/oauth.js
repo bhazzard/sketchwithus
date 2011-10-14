@@ -7,8 +7,7 @@ function userImageTemplate(userId){
 };
 
 function userNameTemplate(userName){
-  return $("<span />")
-    .text(userName);
+  return $("<span />").text(userName);
 };
 
 function logoutTemplate() {
@@ -29,10 +28,16 @@ function userBoxTemplate(profile){
 };
 
 function inviteTemplate(friendId){
-  return $("<a />")
-    .attr("href", "javascript:void(0)")
-    .attr("fb-id", friendId)
+  var checkbox = $("<input />")
+    .attr("type", "checkbox")
+    .attr("id", friendId)
+    .addClass("invite-checkbox");
+  var label = $("<label />")
+    .attr("for", friendId)
     .text("invite");
+  return $("<div />")
+    .append(checkbox)
+    .append(label);
 };
 
 function friendTemplate(friend){
@@ -45,9 +50,20 @@ function friendTemplate(friend){
     .append("<br />")
     .append(inviteTemplate(friend.uid))
     .append(clear);
+};
+
+function getOnlineFriends(callback){
+  var fql = "SELECT uid, name FROM user WHERE " +
+            "online_presence IN ('active', 'idle') " +
+            "AND uid IN " +
+            "( " +
+            " SELECT uid2 FROM friend WHERE uid1 = me() " +
+            ")";
+  FB.api({method: 'fql.query', query: fql}, callback); 
 }; 
 
 $(document).ready(function(){
+  $(".invite-checkbox").button();
   FB.init({ 
     appId:'183470818398206', 
     cookie:true, 
@@ -71,19 +87,12 @@ $(document).ready(function(){
           .append(userBoxTemplate(profile))
           .show();
       });
-
-      var q = "SELECT uid, name FROM user WHERE " +
-              "online_presence IN ('active', 'idle') " +
-              "AND uid IN " +
-              "( " +
-              " SELECT uid2 FROM friend WHERE uid1 = me() " +
-              ")";
-
-      FB.api({method: 'fql.query', query: q}, function(friends){
+      getOnlineFriends(function(friends){
         $("<div />")
           .text(friends.length + " friends")
           .addClass("important")
           .prependTo("#friends-panel");
+
           $.each(friends, function(i, friend){
               $("#friends").append(friendTemplate(friend));
           });

@@ -7,6 +7,7 @@
     "jade": ">= 0.0.1",
     "socket.io": "0.8.4",
     "uuid-lib": ">= 0.0.6",
-    "canvas": ">= 0.7.3"
+    "canvas": ">= 0.7.3",
+    "requirejs": "0.27.1"
   }
 }
