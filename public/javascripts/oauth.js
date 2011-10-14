@@ -14,7 +14,11 @@ function logoutTemplate() {
   return $("<a />")
     .attr("href", "javascript:void(0)")
     .text("(logout)")
-    .addClass("logout-link");
+    .click(function(){
+      FB.logout(function(response) {
+        window.location.reload();
+      });  
+    });
 };
 
 function userBoxTemplate(profile){  
@@ -27,14 +31,15 @@ function userBoxTemplate(profile){
     .append(logoutTemplate());
 };
 
-function inviteTemplate(friendId){
+function inviteTemplate(friend){
   var checkbox = $("<input />")
     .attr("type", "checkbox")
-    .attr("id", friendId)
+    .attr("id", friend.uid)
     .addClass("invite-checkbox");
   var label = $("<label />")
-    .attr("for", friendId)
-    .text("invite");
+    .attr("for", friend.uid)
+    .append(userImageTemplate(friend.uid))
+    .append(userNameTemplate(friend.name));    
   return $("<div />")
     .append(checkbox)
     .append(label);
@@ -45,10 +50,7 @@ function friendTemplate(friend){
   return $("<li />")
     .addClass("user")
     .addClass("important")
-    .append(userImageTemplate(friend.uid))
-    .append(userNameTemplate(friend.name))
-    .append("<br />")
-    .append(inviteTemplate(friend.uid))
+    .append(inviteTemplate(friend))
     .append(clear);
 };
 
@@ -63,7 +65,6 @@ function getOnlineFriends(callback){
 }; 
 
 $(document).ready(function(){
-  $(".invite-checkbox").button();
   FB.init({ 
     appId:'183470818398206', 
     cookie:true, 
@@ -72,13 +73,7 @@ $(document).ready(function(){
     method: 'oauth',
     response_type: 'token'
   });
-  
-  $(document).delegate(".logout-link", "click", function(){
-    FB.logout(function(response) {
-      window.location.reload();
-    });          
-  });
-  
+    
   FB.getLoginStatus(function(response) {
     if (response.status === "connected") {
       FB.api('/me', function(profile) {
@@ -89,7 +84,7 @@ $(document).ready(function(){
       });
       getOnlineFriends(function(friends){
         $("<div />")
-          .text(friends.length + " friends")
+          .text(friends.length + " friends online")
           .addClass("important")
           .prependTo("#friends-panel");
 

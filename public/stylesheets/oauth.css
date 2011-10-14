@@ -40,7 +40,7 @@ ul#friends {
 
 ul#friends li {
   margin : 2px;
-  padding : 2px;
+  padding : 10px 2px 2px 2px;
 }
 
 .user {
@@ -54,4 +54,8 @@ ul#friends li {
 .important {
   font-weight : bolder;
   font-size : 1.1em;
+}
+
+.invite-checkbox {
+  float : left;
 }
