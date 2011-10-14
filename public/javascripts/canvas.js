@@ -2,7 +2,7 @@ require(['artist', 'graphics', 'proxy'], function(Artist, Graphics, Proxy) {
 	var sketchpad_id= $('#sketchpad_id').attr('val');
 
 	var canvas = document.getElementById('sketch'),
-		socket = io.connect('http://localhost/' + sketchpad_id),
+		socket = io.connect('/' + sketchpad_id),
 		offsetX = $(canvas).offset().left,
 		offsetY = $(canvas).offset().top,
 		context,
