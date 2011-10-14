@@ -1,15 +1,3 @@
-function userImageTemplate(userId){
-  return $("<img />")
-    .attr("src", "http://graph.facebook.com/" + userId + "/picture")
-    .attr("height", "36")
-    .attr("width", "36")
-    .addClass("profile-image");  
-};
-
-function userNameTemplate(userName){
-  return $("<span />").text(userName);
-};
-
 function logoutTemplate() {
   return $("<a />")
     .attr("href", "javascript:void(0)")
@@ -29,29 +17,6 @@ function userBoxTemplate(profile){
     .append(userImageTemplate(profile.id))
     .append(userNameTemplate(profile.name))
     .append(logoutTemplate());
-};
-
-function inviteTemplate(friend){
-  var checkbox = $("<input />")
-    .attr("type", "checkbox")
-    .attr("id", friend.uid)
-    .addClass("invite-checkbox");
-  var label = $("<label />")
-    .attr("for", friend.uid)
-    .append(userImageTemplate(friend.uid))
-    .append(userNameTemplate(friend.name));    
-  return $("<div />")
-    .append(checkbox)
-    .append(label);
-};
-
-function friendTemplate(friend){
-  var clear = $("<div />").css("clear:both");                  
-  return $("<li />")
-    .addClass("user")
-    .addClass("important")
-    .append(inviteTemplate(friend))
-    .append(clear);
 };
 
 function getOnlineFriends(callback){
@@ -83,14 +48,8 @@ $(document).ready(function(){
           .show();
       });
       getOnlineFriends(function(friends){
-        $("<div />")
-          .text(friends.length + " friends online")
-          .addClass("important")
-          .prependTo("#friends-panel");
-
-          $.each(friends, function(i, friend){
-              $("#friends").append(friendTemplate(friend));
-          });
+        var view = new FriendList(new FriendCollection(friends));
+        view.render();
       });
     } else {
       $("#authentication-panel").show();
