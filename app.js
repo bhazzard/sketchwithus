@@ -4,7 +4,8 @@
 var uuid = require('uuid-lib'),
     express = require('express'),
     app = module.exports = express.createServer(),
-    sketchpad = require('./lib/sketchpad/app');
+    sketchpad = require('./lib/sketchpad/app'),
+    exporter = require('./lib/sketchpad/export');
     
 // Configuration
 
@@ -34,6 +35,7 @@ app.get('/', function(req, res){
 });
 
 sketchpad.run(app);
+exporter.run(app);
 
 app.listen(8000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
