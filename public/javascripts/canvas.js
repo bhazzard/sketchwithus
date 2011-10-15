@@ -13,14 +13,14 @@ require(['artist', 'graphics', 'proxy'], function(Artist, Graphics, Proxy) {
   if (canvas.getContext) {
     context = canvas.getContext('2d');
     graphics = new Graphics(context);
-    artist = new Artist(graphics);
-    artist = new Proxy(artist, function(invocation) {
+    graphics = new Proxy(graphics, function(invocation) {
       socket.emit('draw', {
         method: invocation.method,
         arguments: invocation.arguments
       });
       invocation.proceed();
     });
+    artist = new Artist(graphics);
   }
   
   context.drawImage(document.getElementById('sketchState'), 0, 0);
@@ -38,9 +38,7 @@ require(['artist', 'graphics', 'proxy'], function(Artist, Graphics, Proxy) {
   });
   
   socket.on('draw', function(data) {
-    var a = artists[data.id],
-      method = a[data.invocation.method];
-    method.apply(a, data.invocation.arguments);
+    artists[data.id].execute(data.command);
   });
   
   function mousemove(event) {

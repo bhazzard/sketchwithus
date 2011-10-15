@@ -95,11 +95,9 @@ requirejs(['artist', 'graphics'], function(Artist, Graphics) {
         req.sketchpad.add_artist(artist_id);
       });
 
-      socket.on('draw', function(data) {
-        var a = req.sketchpad.artists[artist_id],
-          method = a[data.method];
-        method.apply(a, data.arguments);
-        socket.broadcast.emit('draw', { id: artist_id, invocation: data });
+      socket.on('draw', function(command) {
+        req.sketchpad.artists[artist_id].execute(command);
+        socket.broadcast.emit('draw', { id: artist_id, command: command });
       });
 
       socket.on('disconnect', function () {
