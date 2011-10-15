@@ -108,12 +108,15 @@ requirejs(['artist', 'graphics'], function(Artist, Graphics) {
 			});
 		});
 
-    req.sketchpad.canvas.toDataURL(function(err, dataUrl) {
-		  res.render('sketchpad', {
-			  title: 'SketchWith.Us',
-			  sketchpad_id: req.sketchpad.id,
-			  image: dataUrl
-		  });
+    res.render('sketchpad', {
+		  title: 'SketchWith.Us',
+		  sketchpad_id: req.sketchpad.id
+	  });
+	});
+	
+	app.get('/sketchpad/:uuid/sketch.png', with_sketchpad, function(req, res) {
+    req.sketchpad.canvas.toBuffer(function(err, buffer) {
+		  res.send(buffer, {'Content-Type':'image/png'});
 		});
 	});
 });
