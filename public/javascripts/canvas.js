@@ -6,18 +6,17 @@ require(['artist', 'graphics', 'proxy', 'remote_graphics'], function(Artist, Gra
     offsetY = $(canvas).offset().top,
     context = canvas.getContext('2d'),
     graphics = new Graphics(context),
+    graphics = new Proxy(graphics, function(invocation) {
+      socket.emit('draw', {
+        method: invocation.method,
+        arguments: invocation.arguments
+      });
+      invocation.proceed();
+    }),
     artist = new Artist(graphics),
     remote = new RemoteGraphics(sketchpad_id),
     socket = remote.listen(context);
     
-	artist = new Proxy(artist, function(invocation) {
-		socket.emit('draw', {
-			method: invocation.method,
-			arguments: invocation.arguments
-		});
-		invocation.proceed();
-	});
-  
   socket.emit('join');
 //  context.drawImage(document.getElementById('sketchState'), 0, 0);
   

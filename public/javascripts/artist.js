@@ -1,11 +1,18 @@
 define(['pen'], function(Pen) {
   function Artist(graphics) {
+    this._graphics = graphics;
     this._pen = new Pen(graphics);
+  };
+  
+  Artist.prototype.execute = function(command) {
+    var graphics = this._graphics,
+      method = graphics[command.method];
+    method.apply(graphics, command.arguments);
   };
 
   Artist.prototype.setColor = function(hex) {
     this._pen.setColor(hex);
-  }
+  };
 
   Artist.prototype.mousedown = function(x, y) {
     var pen = this._pen;
