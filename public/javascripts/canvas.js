@@ -1,47 +1,25 @@
-require(['artist', 'graphics', 'proxy'], function(Artist, Graphics, Proxy) {
+require(['artist', 'graphics', 'proxy', 'remote_graphics'], function(Artist, Graphics, Proxy, RemoteGraphics) {
   var sketchpad_id= $('#sketchpad_id').attr('val');
 
   var canvas = document.getElementById('sketch'),
-    socket = io.connect('/' + sketchpad_id),
     offsetX = $(canvas).offset().left,
     offsetY = $(canvas).offset().top,
-    context,
-    graphics,
-    artist,
-    artists = {};
-  
-  if (canvas.getContext) {
-    context = canvas.getContext('2d');
-    graphics = new Graphics(context);
-    artist = new Artist(graphics);
-    artist = new Proxy(artist, function(invocation) {
-      socket.emit('draw', {
-        method: invocation.method,
-        arguments: invocation.arguments
-      });
-      invocation.proceed();
-    });
-  }
-  
-//  context.drawImage(document.getElementById('sketchState'), 0, 0);
+    context = canvas.getContext('2d'),
+    graphics = new Graphics(context),
+    artist = new Artist(graphics),
+    remote = new RemoteGraphics(sketchpad_id),
+    socket = remote.listen(context);
+    
+	artist = new Proxy(artist, function(invocation) {
+		socket.emit('draw', {
+			method: invocation.method,
+			arguments: invocation.arguments
+		});
+		invocation.proceed();
+	});
   
   socket.emit('join');
-  
-  socket.on('join', function(ids) {
-    for (var i = 0; i < ids.length; i++) {
-      artists[ids[i]] = new Artist(new Graphics(context));
-    }
-  });
-  
-  socket.on('leave', function(id) {
-    delete artists[id];
-  });
-  
-  socket.on('draw', function(data) {
-    var a = artists[data.id],
-      method = a[data.invocation.method];
-    method.apply(a, data.invocation.arguments);
-  });
+//  context.drawImage(document.getElementById('sketchState'), 0, 0);
   
   function mousemove(event) {
     var x = event.pageX - offsetX,
