@@ -39,12 +39,12 @@ app.get('/', function(req, res){
   });
 });
 
+app.get('/sketchpad', function(req, res) {
+  res.redirect('/sketchpad/' + uuid.raw(), 301);
+});
+
 requirejs(['artist', 'graphics'], function(Artist, Graphics) {
   var sketches = {};
-
-  app.get('/sketchpad', function(req, res) {
-    res.redirect('/sketchpad/' + uuid.create(), 301);
-  });
 
   function with_sketchpad(req, res, next) {
     var sketchpad_id = req.params.uuid;
@@ -113,10 +113,18 @@ requirejs(['artist', 'graphics'], function(Artist, Graphics) {
       sketchpad_id: req.sketchpad.id
     });
   });
-  
-  app.get('/sketchpad/:uuid/sketch.png', with_sketchpad, function(req, res) {
+ 
+  function no_cache(req, res, next) {
+    res.header('Cache-Control','no-cache, must-revalidate');
+    res.header('Expires','Mon 1 Jan 2000 01:00:00 GMT');
+    res.header('Pragma','no-cache');
+    next();
+  };
+ 
+  app.get('/sketchpad/:uuid/sketch.png', no_cache, with_sketchpad, function(req, res) {
     req.sketchpad.canvas.toBuffer(function(err, buffer) {
-      res.send(buffer, {'Content-Type':'image/png'});
+      res.contentType('image/png');
+      res.send(buffer);
     });
   });
 });
