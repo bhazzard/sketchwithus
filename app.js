@@ -40,85 +40,85 @@ app.get('/', function(req, res){
 });
 
 requirejs(['artist', 'graphics'], function(Artist, Graphics) {
-	var sketches = {};
+  var sketches = {};
 
-	app.get('/sketchpad', function(req, res) {
-		res.redirect('/sketchpad/' + uuid.create(), 301);
-	});
+  app.get('/sketchpad', function(req, res) {
+    res.redirect('/sketchpad/' + uuid.create(), 301);
+  });
 
-	function with_sketchpad(req, res, next) {
-		var sketchpad_id = req.params.uuid;
+  function with_sketchpad(req, res, next) {
+    var sketchpad_id = req.params.uuid;
 
-		if (!sketches[sketchpad_id]) {
-		  var canvas = new Canvas(800, 600),
-		    graphics = new Graphics(canvas.getContext('2d'));
-		  
-			sketches[sketchpad_id] = {
-			  artists: {},
-			  canvas: canvas,
-			  graphics: graphics
-			};
-		}
+    if (!sketches[sketchpad_id]) {
+      var canvas = new Canvas(800, 600),
+        graphics = new Graphics(canvas.getContext('2d'));
+      
+      sketches[sketchpad_id] = {
+        artists: {},
+        canvas: canvas,
+        graphics: graphics
+      };
+    }
 
-		req.sketchpad = {
-			id: sketchpad_id,
-			artists: sketches[sketchpad_id].artists,
-			artist_ids: function() {
-				var artists = sketches[sketchpad_id].artists,
-				  artist_id_list = [];
-				for (var artist_id in artists) {
-				  if (artists.hasOwnProperty(artist_id)) {
-				    artist_id_list.push(artist_id);
-				  }
-				}
-				return artist_id_list;
-			},
-			add_artist: function(artist_id) {
-				sketches[sketchpad_id].artists[artist_id] = new Artist(sketches[sketchpad_id].graphics);
-			},
-			remove_artist: function(artist_id) {
-				delete sketches[sketchpad_id].artists[artist_id];
-			},
-			canvas: sketches[sketchpad_id].canvas
-		};
+    req.sketchpad = {
+      id: sketchpad_id,
+      artists: sketches[sketchpad_id].artists,
+      artist_ids: function() {
+        var artists = sketches[sketchpad_id].artists,
+          artist_id_list = [];
+        for (var artist_id in artists) {
+          if (artists.hasOwnProperty(artist_id)) {
+            artist_id_list.push(artist_id);
+          }
+        }
+        return artist_id_list;
+      },
+      add_artist: function(artist_id) {
+        sketches[sketchpad_id].artists[artist_id] = new Artist(sketches[sketchpad_id].graphics);
+      },
+      remove_artist: function(artist_id) {
+        delete sketches[sketchpad_id].artists[artist_id];
+      },
+      canvas: sketches[sketchpad_id].canvas
+    };
 
-		next();
-	}
+    next();
+  }
 
-	app.get('/sketchpad/:uuid', with_sketchpad, function(req, res) {
-		io.of('/' + req.sketchpad.id).on('connection', function(socket) {
-			var artist_id = socket.id;
+  app.get('/sketchpad/:uuid', with_sketchpad, function(req, res) {
+    io.of('/' + req.sketchpad.id).on('connection', function(socket) {
+      var artist_id = socket.id;
 
-			socket.on('join', function (data) {
-				socket.broadcast.emit('join', [artist_id]);
-				socket.emit('join', req.sketchpad.artist_ids());
-				req.sketchpad.add_artist(artist_id);
-			});
+      socket.on('join', function (data) {
+        socket.broadcast.emit('join', [artist_id]);
+        socket.emit('join', req.sketchpad.artist_ids());
+        req.sketchpad.add_artist(artist_id);
+      });
 
-			socket.on('draw', function(data) {
-			  var a = req.sketchpad.artists[artist_id],
-			    method = a[data.method];
-		    method.apply(a, data.arguments);
-				socket.broadcast.emit('draw', { id: artist_id, invocation: data });
-			});
+      socket.on('draw', function(data) {
+        var a = req.sketchpad.artists[artist_id],
+          method = a[data.method];
+        method.apply(a, data.arguments);
+        socket.broadcast.emit('draw', { id: artist_id, invocation: data });
+      });
 
-			socket.on('disconnect', function () {
-				socket.broadcast.emit('leave', artist_id);
-				req.sketchpad.remove_artist(artist_id);
-			});
-		});
+      socket.on('disconnect', function () {
+        socket.broadcast.emit('leave', artist_id);
+        req.sketchpad.remove_artist(artist_id);
+      });
+    });
 
     res.render('sketchpad', {
-		  title: 'SketchWith.Us',
-		  sketchpad_id: req.sketchpad.id
-	  });
-	});
-	
-	app.get('/sketchpad/:uuid/sketch.png', with_sketchpad, function(req, res) {
+      title: 'SketchWith.Us',
+      sketchpad_id: req.sketchpad.id
+    });
+  });
+  
+  app.get('/sketchpad/:uuid/sketch.png', with_sketchpad, function(req, res) {
     req.sketchpad.canvas.toBuffer(function(err, buffer) {
-		  res.send(buffer, {'Content-Type':'image/png'});
-		});
-	});
+      res.send(buffer, {'Content-Type':'image/png'});
+    });
+  });
 });
 
 app.listen(8000);
