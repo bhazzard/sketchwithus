@@ -1,7 +1,6 @@
 input(id="sketchpad_id", type="hidden", val="#{sketchpad_id}")
 
-canvas(id="sketch", width="800", height="600")
-img(id="sketchState", src="/sketchpad/#{sketchpad_id}/sketch.png")
+#sketch
 
 script(type="text/javascript", src="http://cdnjs.cloudflare.com/ajax/libs/socket.io/0.8.4/socket.io.min.js")
 script(type="text/javascript", src="http://cdnjs.cloudflare.com/ajax/libs/require.js/0.26.0/require.min.js", data-main="/javascripts/canvas")

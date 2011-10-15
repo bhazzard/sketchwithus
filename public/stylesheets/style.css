@@ -4,17 +4,20 @@ body
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
+div
+{
+  margin: 0;
+  padding: 0;
+}
+
 a
 {
   color: #00B7FF;
 }
 
-canvas
+#sketch
 {
+  width: 800px;
+  height: 600px;
   border: 1px solid black;
-}
-
-#sketchState
-{
-  display:none;
 }
