@@ -60,7 +60,7 @@ require(['artist', 'graphics', 'proxy', 'remote_graphics'], function(Artist, Gra
       invocation.proceed();
     });
     artist = new Artist(graphics);
-    remote = new RemoteGraphics(sketchpad_id);
+    remote = new RemoteGraphics(sketchpad_id, io);
     socket = remote.listen(context);
     
     context.drawImage(this, 0, 0);
