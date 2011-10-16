@@ -20,6 +20,12 @@ $(function(){
         new FriendsView(friends).render();
       });
 
+      $("body").delegate(".logout-link", "click", function(){
+        FB.logout(function(response) {
+          window.location.reload();
+        });
+      });
+
     } else {
       $("#authentication-panel").show();
       FB.Event.subscribe('auth.login', function(auth) {

@@ -8,17 +8,45 @@ $(function(){
     defaults : {
       isInvited : false
     },
-    sendInvitation : function(){
-      var invited = this.get("isInvited");
-      if(invited) { 
-        var uid = this.get("uid");
-        alert(uid);
-      }
+    toggleInviteStatus : function(){
+      this.set({isInvited : !this.get("isInvited")});
     }
   });
 
   window.FriendList = Backbone.Collection.extend({ 
-    model : Friend
+    model : Friend,
+    sendInvites : function(){
+      var uids = "";
+      _(this.models).each(function(friend){
+        if(friend.get("isInvited")){
+          uids = uids + friend.get("uid") + ",";
+        }
+      });
+      
+      this._createEvent(this._sendInvites(uids));         
+    },
+    _createEvent : function(callback){
+      FB.api({
+        method: 'events.create',
+        event_info : {
+          name : "some event",
+          start_time : "11:00pm"
+        }
+      }, callback);      
+    },
+    _sendInvites : function(uids){
+      return function(eventId){
+        FB.api({
+          method: 'events.invite',
+          eid : eventId,
+          uids :uids,
+          personal_message : 'test message2'
+        }, function(response){
+          console.log(response);
+          alert("invites sent");
+        });
+      };
+    }    
   });
 
   window.FriendView = Backbone.View.extend({
@@ -35,7 +63,7 @@ $(function(){
       return this;
     },
     _inviteStatusChanged : function(){
-      this.model.set({isInvited : true});
+      this.model.toggleInviteStatus();
     }
   });
 
@@ -56,9 +84,7 @@ $(function(){
       return this;    
     },
     processInvitations : function(){
-      this.collection.each(function(friend){
-        friend.sendInvitation();
-      });
+      this.collection.sendInvites();
     }
   });
 });

@@ -15,7 +15,7 @@
       <div id="stage">
         <div id="authentication-panel">
           <div id="login-panel">
-            <fb:login-button perms="friends_online_presence">
+            <fb:login-button perms="friends_online_presence,create_event">
               Login with Facebook
             </fb:login-button>
           </div>
@@ -35,7 +35,7 @@
         <div id="user-box" class="important user">
           <img class="profile-image" height="36" width="36" src="http://graph.facebook.com/<%=id%>/picture" />
           <span><%=name%></span>
-          <a href="javascript:void(0)">(logout)</a>
+          <a class="logout-link" href="javascript:void(0)">(logout)</a>
         </div> 
       </script>
 
