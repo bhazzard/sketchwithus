@@ -1,24 +1,13 @@
 require(['artist', 'graphics', 'proxy', 'remote_graphics'], function(Artist, Graphics, Proxy, RemoteGraphics) {
   var sketchpad_id= $('#sketchpad_id').attr('val');
 
-  var canvas = document.getElementById('sketch'),
-    offsetX = $(canvas).offset().left,
-    offsetY = $(canvas).offset().top,
-    context = canvas.getContext('2d'),
-    graphics = new Graphics(context),
-    graphics = new Proxy(graphics, function(invocation) {
-      socket.emit('draw', {
-        method: invocation.method,
-        arguments: invocation.arguments
-      });
-      invocation.proceed();
-    }),
-    artist = new Artist(graphics),
-    remote = new RemoteGraphics(sketchpad_id),
-    socket = remote.listen(context);
-    
-  socket.emit('join');
-//  context.drawImage(document.getElementById('sketchState'), 0, 0);
+  var sketch = $('#sketch'),
+    offsetX = sketch.offset().left,
+    offsetY = sketch.offset().top,
+    canvas,
+    context,
+    graphics,
+    artist;
   
   function mousemove(event) {
     var x = event.pageX - offsetX,
@@ -55,20 +44,44 @@ require(['artist', 'graphics', 'proxy', 'remote_graphics'], function(Artist, Gra
     artist.mouseenter(x, y);
   };
   
-  $(canvas).bind({
-    mousedown: mousedown,
-    mouseenter: mouseenter,
-    mousemove: mousemove,
-    mouseup: mouseup,
-    mouseout: mouseout
-  });
-  
-  $(document).bind({
-    mousedown: mousedown,
-    mouseup: mouseup
-  });
+  var image = new Image();
+  image.onload = function() {
+    canvas = document.createElement('canvas');
+    canvas.setAttribute('width', sketch.width());
+    canvas.setAttribute('height', sketch.height());
+    
+    context = canvas.getContext('2d');
+    graphics = new Graphics(context);
+    graphics = new Proxy(graphics, function(invocation) {
+      socket.emit('draw', {
+        method: invocation.method,
+        arguments: invocation.arguments
+      });
+      invocation.proceed();
+    });
+    artist = new Artist(graphics);
+    remote = new RemoteGraphics(sketchpad_id, io);
+    socket = remote.listen(context);
+    
+    context.drawImage(this, 0, 0);
+    
+    sketch.append(canvas);
+    
+    socket.emit('join');
+    
+    $(canvas).bind({
+      mousedown: mousedown,
+      mouseenter: mouseenter,
+      mousemove: mousemove,
+      mouseup: mouseup,
+      mouseout: mouseout
+    });
+    
+    $(document).bind({
+      mousedown: mousedown,
+      mouseup: mouseup
+    });
 
-  $(function() {
     $('#ink').ColorPicker({
       color: '#000000',
       flat: true,
@@ -76,5 +89,6 @@ require(['artist', 'graphics', 'proxy', 'remote_graphics'], function(Artist, Gra
         artist.setColor(hex);
       }
     });
-  });
+  };
+  image.src = location.pathname + "/sketch.png";
 });

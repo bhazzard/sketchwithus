@@ -1,8 +1,7 @@
 /**
  * Module dependencies.
  */
-var uuid = require('uuid-lib'),
-    express = require('express'),
+var express = require('express'),
     app = module.exports = express.createServer(),
     sketchpad = require('./lib/sketchpad/app'),
     exporter = require('./lib/sketchpad/export');
