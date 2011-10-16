@@ -20,9 +20,8 @@ function userBoxTemplate(profile){
 };
 
 function getOnlineFriends(callback){
-  var fql = "SELECT uid, name FROM user WHERE " +
-            "online_presence IN ('active', 'idle') " +
-            "AND uid IN " +
+  var fql = "SELECT uid, name, online_presence FROM user WHERE " +
+            "uid IN " +
             "( " +
             " SELECT uid2 FROM friend WHERE uid1 = me() " +
             ")";
@@ -47,15 +46,18 @@ $(document).ready(function(){
           .append(userBoxTemplate(profile))
           .show();
       });
+
       getOnlineFriends(function(friends){
-        var view = new FriendList(new FriendCollection(friends));
+        var f = new Friends(friends);
+        var view = new FriendsView(f);
         view.render();
       });
+
     } else {
       $("#authentication-panel").show();
       FB.Event.subscribe('auth.login', function(auth) {
         window.location.reload();
-      });              
-    }
+      });
+    }              
   });                  
 });

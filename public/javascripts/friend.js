@@ -10,58 +10,63 @@ function userNameTemplate(userName){
   return $("<span />").text(userName);
 };
 
-var Friend = Backbone.Model.extend({
-  sendInvitation : function(){
-    alert("someday, this will work!");
-  }
-});
+$(document).ready(function(){
+  window.Friend = Backbone.Model.extend({
+    defaults : {
+      isInvited : false
+    },
+    sendInvitation : function(){
+      var invited = this.get("isInvited");
+      if(invited) { 
+        var uid = this.get("uid");
+        alert(uid);
+      }
+    }
+  });
 
-var FriendCollection = Backbone.Collection.extend({
-  model : Friend
-});
+  window.Friends = Backbone.Collection.extend({ 
+    model : Friend 
+  });
 
-var FriendList = Backbone.View.extend({
-  el : '#friends-panel',
-  initialize : function(friends){
-    this.friends = friends;
-  },
-  render : function(){
-    $("<div />")
-      .text(this.friends.models.length + " friends online")
-      .addClass("important")
-      .prependTo(this.el);
-    _(this.friends.models).each(function(friend){
-      var view = new FriendListItem(friend);
-      view.render();
-    });
-    return this;    
-  }
-});
-
-var FriendListItem = Backbone.View.extend({
-  el : 'ul#friends',
-  initialize : function(friend){
-    this.friend = friend;
-  },
-  render : function(){
-    var clear = $("<div />").css("clear:both");
-    var checkbox = $("<input />")
-      .attr("type", "checkbox")
-      .attr("id", this.friend.get("uid"))
-      .addClass("invite-checkbox");
-    var label = $("<label />")
-      .attr("for", this.friend.get("uid"))
-      .append(userImageTemplate(this.friend.get("uid")))
-      .append(userNameTemplate(this.friend.get("name")));    
-    var div = $("<div />")
-      .append(checkbox)
-      .append(label);
-    $("<li />")
-      .addClass("user")
-      .addClass("important")
-      .append(div)
-      .append(clear)
-      .appendTo(this.el);
+  window.FriendView = Backbone.View.extend({
+    tagName : "li",
+    template: _.template($('#friend-template').html()),
+    events : {
+      "click .invite-checkbox" : "toggleInvitation"
+    },
+    initialize : function(model){
+      this.model = model;
+    },
+    render : function(){
+      $(this.el).html(this.template(this.model.toJSON()));
       return this;
-  }
+    },
+    toggleInvitation : function(){
+      this.model.set({isInvited : true});
+    }
+  });
+
+  window.FriendsView = Backbone.View.extend({
+    el : $("#friends-panel"),
+    events : {
+      "click #send-invitation" : "processInvitations"
+    },
+    initialize : function(friends){
+      this.friends = friends;
+    },
+    render : function(){
+      _(this.friends.models).each(function(friend){
+        this.$("ul#friends").append(new FriendView(friend).render().el);
+      });
+      var template = _.template($("#friend-count-template").html());
+      this.el.prepend(template({count : this.friends.length}));
+      return this;    
+    },
+    processInvitations : function(){
+      this.friends.each(function(friend){
+        friend.sendInvitation();
+      });
+    }
+  });
 });
+
