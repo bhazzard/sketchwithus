@@ -50,6 +50,7 @@ Run the app:
 
 <pre>
 node app.js
+node app.js --port 8001 --image
 </pre>
 
 Modify your hosts file:
@@ -59,6 +60,7 @@ Modify your hosts file:
 </pre>
 
 Point your browser to http://sketchwith.us:8000
+Click the Start Sketchin' link, and start drawing.
 
-Optionally, open another browser instance and point it to the same location. Draw on the canvas,
-your drawing should show up in the other browser window in real-time.
+Optionally, open another browser instance and point it to the same location as the first browser.
+Draw on the canvas, your drawing should show up in the other browser window in real-time.

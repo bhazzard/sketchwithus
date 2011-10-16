@@ -1,15 +1,11 @@
 define(['artist', 'graphics'], function (Artist, Graphics) {
-
-  //TODO: will the hard-coded port bite us in the ass?
-  var socketServer = typeof(location) === 'undefined' ? 'http://localhost:8000/' : '/';
-
-	function RemoteGraphics(sketchpad_id, io) {
-	  this._io = io;
+	function RemoteGraphics(sketchpad_id, socket) {
+	  this._socket = socket;
 		this._sketchpad_id = sketchpad_id;
 	};
 
 	RemoteGraphics.prototype.listen = function(context) {
-		var socket = this._io.connect(socketServer + this._sketchpad_id),
+		var socket = this._socket,
 		    artists = {};
 		    
 		socket.on('join', function(ids) {
