@@ -4,7 +4,7 @@
 var express = require('express'),
     app = module.exports = express.createServer(),
     sketchpad = require('./lib/sketchpad/app'),
-    exporter = require('./lib/sketchpad/export');
+    image = require('./lib/image/app');
     
 // Configuration
 
@@ -34,7 +34,7 @@ app.get('/', function(req, res){
 });
 
 sketchpad.run(app);
-exporter.run(app);
+image.run(app);
 
 app.listen(8000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
