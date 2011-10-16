@@ -1,34 +1,4 @@
-function logoutTemplate() {
-  return $("<a />")
-    .attr("href", "javascript:void(0)")
-    .text("(logout)")
-    .click(function(){
-      FB.logout(function(response) {
-        window.location.reload();
-      });  
-    });
-};
-
-function userBoxTemplate(profile){  
-  return $("<div />")
-    .attr("id", "user-box")
-    .addClass("user")
-    .addClass("important")
-    .append(userImageTemplate(profile.id))
-    .append(userNameTemplate(profile.name))
-    .append(logoutTemplate());
-};
-
-function getOnlineFriends(callback){
-  var fql = "SELECT uid, name, online_presence FROM user WHERE " +
-            "uid IN " +
-            "( " +
-            " SELECT uid2 FROM friend WHERE uid1 = me() " +
-            ")";
-  FB.api({method: 'fql.query', query: fql}, callback); 
-}; 
-
-$(document).ready(function(){
+$(function(){
   FB.init({ 
     appId:'183470818398206', 
     cookie:true, 
@@ -41,16 +11,13 @@ $(document).ready(function(){
   FB.getLoginStatus(function(response) {
     if (response.status === "connected") {
       FB.api('/me', function(profile) {
-        $("#authentication-panel")
-          .empty()
-          .append(userBoxTemplate(profile))
-          .show();
+        var template = _.template($("#user-template").html());
+        $("#authentication-panel").html(template(profile)).show();
       });
 
-      getOnlineFriends(function(friends){
-        var f = new Friends(friends);
-        var view = new FriendsView(f);
-        view.render();
+      getFriends(function(data){
+        var friends = new FriendList(data);
+        new FriendsView(friends).render();
       });
 
     } else {
