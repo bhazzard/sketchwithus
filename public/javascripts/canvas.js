@@ -87,7 +87,7 @@ require(['artist', 'graphics', 'proxy', 'remote_graphics'], function(Artist, Gra
       color: '#000000',
       flat: true,
       onChange: function (hsb, hex, rgb) {
-        graphics.setColor(hex);
+        artist.setColor(hex);
       }
     });
   };
