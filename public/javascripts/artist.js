@@ -10,10 +10,6 @@ define(['pen'], function(Pen) {
     method.apply(graphics, command.arguments);
   };
 
-  Artist.prototype.setColor = function(hex) {
-    this._pen.setColor(hex);
-  };
-
   Artist.prototype.mousedown = function(x, y) {
     var pen = this._pen;
     if (!pen.down()) {

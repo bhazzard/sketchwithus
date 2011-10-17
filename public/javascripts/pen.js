@@ -4,10 +4,6 @@ define(['line'], function(Line) {
     this._width = 5;
     this._down = false;
   };
-
-  Pen.prototype.setColor = function(hex) {
-    this._graphics.setFill(hex);
-  }
   
   Pen.prototype.width = function(width) {
     if (width === undefined) {
