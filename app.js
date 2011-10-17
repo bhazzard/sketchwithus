@@ -3,9 +3,11 @@
  */
 var express = require('express'),
     app = module.exports = express.createServer(),
-    sketchpad = require('./lib/sketchpad/app'),
-    image = require('./lib/image/app'),
-    argv = require('optimist').argv;
+    argv = require('optimist').argv,
+    SketchpadRepository = require('./lib/sketchpad/repository').Repository,
+    EmitterRepository = require('./lib/emitters/repository').Repository,
+    SketchpadService = require('./lib/sketchpad/module').Service,
+    ImageService = require('./lib/image/module').Service;
     
 // Configuration
 
@@ -34,11 +36,18 @@ app.get('/', function(req, res){
   });
 });
 
-if (argv.image) {
-  image.run(app);
-} else {
-  sketchpad.run(app);
-}
+(function() {
+  var emitters = new EmitterRepository();
+  var sketchpads = new SketchpadRepository(emitters);
+
+  if (argv.sketchpad) {
+    new SketchpadService(sketchpads, emitters).run(app);
+  }
+
+  if (argv.image) {
+    new ImageService(emitters).run(app);
+  }
+})();
 
 app.listen(argv.port || 8000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
