@@ -45,7 +45,7 @@ app.get('/', function(req, res){
   }
 
   if (argv.image) {
-    new ImageService(emitters).run(app);
+    new ImageService(sketchpads).run(app);
   }
 })();
 
