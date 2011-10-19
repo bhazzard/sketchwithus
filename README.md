@@ -3,30 +3,19 @@
 This guide is written assuming you are developing on Ubuntu. The first step is to install everything we need to run node.js:
 
 <pre>
-sudo apt-get update
-sudo apt-get upgrade
-sudo apt-get install build-essential python-software-properties libssl-dev libreadline-dev git-core curl libcairo2-dev
+sudo add-apt-repository ppa:chris-lea/node.js -y
+sudo apt-get update -y
+sudo apt-get upgrade -y
+sudo apt-get install build-essential python-software-properties libssl-dev libreadline-dev git-core curl libcairo2-dev -y
+sudo apt-get install nodejs nodejs-dev
 </pre>
 
-Next, install NVM:
+Next, install NPM:
 
 <pre>
-git clone git://github.com/creationix/nvm.git ~/.nvm
-echo ". ~/.nvm/nvm.sh" >> .bashrc
-</pre>
-
-Now close your terminal and open a new one. The nvm command should be on your path.
-
-Finally, install node.js:
-
-<pre>
-nvm install v0.4.12
-</pre>
-
-An optional, but recommended, step is also to set your default node.js version. Otherwise, you will have to select which version to use every time you open a new terminal:
-
-<pre>
-nvm alias default v0.4.12
+git clone git://github.com/isaacs/npm.git
+cd npm
+sudo make install
 </pre>
 
 That's it!
