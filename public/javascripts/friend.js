@@ -90,12 +90,6 @@ $(function(){
         var online = friend.get("online_presence");
         return online === 'active' || online === 'idle';
       });
-      console.log(sorted);
-      //sorted.each(function(friend){
-      //  this.$("ul#friends").append(new FriendView(friend).render().el);
-      //});
-      //var template = _.template($("#friend-count-template").html());
-      //this.el.prepend(template({count : this.collection.length}));
       return this;    
     },
     processInvitations : function(){
