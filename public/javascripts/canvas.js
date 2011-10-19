@@ -102,5 +102,5 @@ require(['artist', 'graphics', 'proxy', 'remote_graphics'], function(Artist, Gra
       }
     });
   };
-  image.src = "http://localhost:8000/sketchpad/" + sketchpad_id + "/sketch.png";
+  image.src = "/sketchpad/" + sketchpad_id + "/sketch.png";
 });
