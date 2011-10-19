@@ -1,10 +1,33 @@
+#fb-root
 input(id="sketchpad_id", type="hidden", val="#{sketchpad_id}")
 
 #sketch
 
 script(type="text/javascript", src="http://cdnjs.cloudflare.com/ajax/libs/socket.io/0.8.4/socket.io.min.js")
 script(type="text/javascript", src="http://cdnjs.cloudflare.com/ajax/libs/require.js/0.26.0/require.min.js", data-main="/javascripts/canvas")
-
-div(id="ink")
+script(src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.1.7/underscore-min.js")
 link(rel="stylesheet", type="text/css", href="/plugins/colorpicker/css/colorpicker.css")
 script(type="text/javascript", src="/plugins/colorpicker/js/colorpicker.js")
+
+div(id="sketchoptions")
+  div(id="ink")
+
+div(id="authentication-panel")
+  fb:login-button(perms="friends_online_presence,create_event") Login with Facebook
+
+
+script(type="text/template", id="user-template")
+  | <div id="user-box" class="important user">
+  |  <img class="profile-image" height="36" width="36" src="http://graph.facebook.com/<%=id%>/picture" />
+  |  <span><%=name%></span>
+  |  <a class="logout-link" href="javascript:void(0)">(logout)</a>
+  | </div> 
+
+script(type="text/template", id="artist-template")
+  |<div>
+  |  <label for="<%=id%>">
+  |    <img class="profile-image" height="36" width="36" src="http://graph.facebook.com/<%=id%>/picture" />
+  |    <div><%= name %></div>
+  |  </label>
+  |  <div style="clear:both"></div>
+  |</div>

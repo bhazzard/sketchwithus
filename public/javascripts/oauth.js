@@ -11,19 +11,9 @@ $(function(){
   FB.getLoginStatus(function(response) {
     if (response.status === "connected") {
       FB.api('/me', function(profile) {
+        $('#authentication-panel').trigger('userLoggedIn', profile);
         var template = _.template($("#user-template").html());
         $("#authentication-panel").html(template(profile)).show();
-      });
-
-      getFriends(function(data){
-        var friends = new FriendList(data);
-        new FriendsView(friends).render();
-      });
-
-      $("body").delegate(".logout-link", "click", function(){
-        FB.logout(function(response) {
-          window.location.reload();
-        });
       });
 
     } else {
@@ -32,5 +22,10 @@ $(function(){
         window.location.reload();
       });
     }              
-  });                  
+  });
+
+  $('#authentication-panel').bind('recievedLogin', function(event, artist){
+    var template = _.template($("#artist-template").html());
+    $(this).append(template(artist));
+  });
 });

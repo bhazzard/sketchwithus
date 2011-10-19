@@ -2,11 +2,12 @@ define(['artist', 'graphics'], function (Artist, Graphics) {
   function RemoteGraphics(sketchpad_id, emitter) {
     this._emitter = emitter;
     this._sketchpad_id = sketchpad_id;
+    this.artists = {};
   };
 
   RemoteGraphics.prototype.listen = function(context) {
     var emitter= this._emitter,
-      artists = {};
+      artists = this.artists;
     
     emitter.on('join', function(ids) {
       for (var i = 0; i < ids.length; i++) {

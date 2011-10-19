@@ -83,6 +83,17 @@ require(['artist', 'graphics', 'proxy', 'remote_graphics'], function(Artist, Gra
       mouseup: mouseup
     });
 
+    $('#authentication-panel').bind('userLoggedIn', function(event, profile) {
+      socket.emit('login', {
+        id : profile.id,
+        name : profile.name
+      });
+    });
+
+    socket.on('login', function(profile_id) {
+      $('#authentication-panel').trigger('recievedLogin', profile_id);
+    });
+
     $('#ink').ColorPicker({
       color: '#000000',
       flat: true,

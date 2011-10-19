@@ -1,8 +1,24 @@
-!!! 5
 html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
+    script(type="text/javascript", src="http://connect.facebook.net/en_US/all.js")
     script(type="text/javascript", src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js")
+    script(type="text/javascript", src="/javascripts/oauth.js")
     meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    style
+      #authentication-panel {
+        position : absolute;
+        top : 50px;
+        left : 50px;
+      }
+      
+      #sketch {
+        position : absolute;
+        left : 250px;
+      }
+      #sketchoptions {
+        position : absolute;
+        left : 1100px;
+      } 
   body!= body

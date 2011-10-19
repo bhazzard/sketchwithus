@@ -13,47 +13,57 @@ $(function(){
     }
   });
 
-  window.FriendList = Backbone.Collection.extend({ 
-    model : Friend,
-    sendInvites : function(){
-      var uids = "";
-      _(this.models).each(function(friend){
-        if(friend.get("isInvited")){
-          uids = uids + friend.get("uid") + ",";
-        }
-      });
-      
-      this._createEvent(this._sendInvites(uids));         
+  window.SketchEvent = Backbone.Model.extend({
+    initialize : function(invited){
+      this.models = invited;
+    },
+    sendInvitations : function(){
+      this._createEvent(this._buildInvitationsCallback());         
     },
     _createEvent : function(callback){
       FB.api({
         method: 'events.create',
         event_info : {
-          name : "some event",
+          name : "some event2",
           start_time : "11:00pm"
         }
       }, callback);      
     },
-    _sendInvites : function(uids){
+    _buildInvitationsCallback : function(){
+      var uids = this._buildUidString();
       return function(eventId){
         FB.api({
           method: 'events.invite',
           eid : eventId,
           uids :uids,
-          personal_message : 'test message2'
-        }, function(response){
-          console.log(response);
-          alert("invites sent");
+          personal_message : 'test message.'
+        }, function(successful){
+          if(successful){
+            alert("invites sent");
+          } else {
+            alert("unknown error");
+          }
         });
       };
-    }    
+    },
+    _buildUidString : function(){
+      var uids = "";
+      _(this.models).each(function(friend){
+        uids = uids + friend.get("uid") + ",";
+      });
+      return uids;
+    }
+  });
+
+  window.FriendList = Backbone.Collection.extend({ 
+    model : Friend    
   });
 
   window.FriendView = Backbone.View.extend({
     tagName : "li",
     template: _.template($('#friend-template').html()),
     events : {
-      "click .invite-checkbox" : "_inviteStatusChanged"
+      "click input.invite-checkbox" : "_inviteStatusChanged"
     },
     initialize : function(model){
       this.model = model;
@@ -76,15 +86,24 @@ $(function(){
       this.collection = collection;
     },
     render : function(){
-      _(this.collection.models).each(function(friend){
-        this.$("ul#friends").append(new FriendView(friend).render().el);
+      var sorted = _(this.collection.models).sortBy(function(friend){
+        var online = friend.get("online_presence");
+        return online === 'active' || online === 'idle';
       });
-      var template = _.template($("#friend-count-template").html());
-      this.el.prepend(template({count : this.collection.length}));
+      console.log(sorted);
+      //sorted.each(function(friend){
+      //  this.$("ul#friends").append(new FriendView(friend).render().el);
+      //});
+      //var template = _.template($("#friend-count-template").html());
+      //this.el.prepend(template({count : this.collection.length}));
       return this;    
     },
     processInvitations : function(){
-      this.collection.sendInvites();
+      var invitedFriends = this.collection.select(function(friend){ return friend.get("isInvited");});
+      if(invitedFriends.length > 0) {
+        var event = new SketchEvent(invitedFriends);
+        event.sendInvitations();
+      }
     }
   });
 });
