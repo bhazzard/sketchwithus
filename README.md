@@ -49,8 +49,7 @@ npm install
 Run the app:
 
 <pre>
-node app.js
-node app.js --port 8001 --image
+node app.js --sketchpad --image
 </pre>
 
 Modify your hosts file:
