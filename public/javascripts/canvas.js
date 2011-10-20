@@ -90,8 +90,10 @@ require(['artist', 'graphics', 'proxy', 'remote_graphics'], function(Artist, Gra
       });
     });
 
-    socket.on('login', function(profile_id) {
-      $('#authentication-panel').trigger('recievedLogin', profile_id);
+    socket.on('login', function(artists) {
+      _.each(artists, function(artist) {
+        $('#authentication-panel').trigger('recievedLogin', artist);
+      });
     });
 
     $('#ink').ColorPicker({
