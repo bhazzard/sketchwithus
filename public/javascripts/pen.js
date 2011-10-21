@@ -1,4 +1,4 @@
-define(['line'], function(Line) {
+define(function() {
   function Pen(graphics) {
     this._graphics = graphics;
     this._width = 5;
@@ -35,17 +35,9 @@ define(['line'], function(Line) {
   Pen.prototype.stroke = function(x, y) {
     if (this._down) {
       var graphics = this._graphics,
-        color = this._color,
-        point = [x, y],
-        line = new Line(point, this._last),
-        points = line.interpolate(),
-        radius = this._width / 2,
-        len = points.length,
-        i;
+        point = [x, y];
       
-      for (i = 0; i < len; i++) {
-        graphics.circle(points[i], radius, color);
-      }
+      graphics.line(point, this._last, this._width, this._color);
       
       this._last = point;
     }
