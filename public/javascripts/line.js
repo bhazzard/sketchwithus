@@ -1,35 +1,35 @@
 define(function() {
   function interpolateX(x, start, end) {
-    return Math.round(start.y + (x - start.x) * ((end.y - start.y)/(end.x - start.x)));
+    return Math.round(start[1] + (x - start[0]) * ((end[1] - start[1])/(end[0] - start[0])));
   };
   
   function interpolateY(y, start, end) {
-    return Math.round(((end.x - start.x) * (y - start.y))/(end.y - start.y) + start.x);
+    return Math.round(((end[0] - start[0]) * (y - start[1]))/(end[1] - start[1]) + start[0]);
   };
 
   function Line(start, end) {
-    this.start = start || { x: 0, y: 0 };
+    this.start = start || [0, 0];
     this.end = end || this.start;
   };
 
   Line.prototype.interpolate = function() {
     var start = this.start,
       end = this.end,
-      xDelta = Math.abs(end.x - start.x),
-      yDelta = Math.abs(end.y - start.y),
-      xSign = Math.round(xDelta/(end.x - start.x)),
-      ySign = Math.round(yDelta/(end.y - start.y)),
+      xDelta = Math.abs(end[0] - start[0]),
+      yDelta = Math.abs(end[1] - start[1]),
+      xSign = Math.round(xDelta/(end[0] - start[0])),
+      ySign = Math.round(yDelta/(end[1] - start[1])),
       points = [start],
       x, y;
     
     if (xDelta > 0 || yDelta > 0) {
       if (xDelta > yDelta) {
-        for (x = start.x + xSign; x !== end.x; x += xSign) {
-          points.push({ x: x, y: interpolateX(x, start, end) });
+        for (x = start[0] + xSign; x !== end[0]; x += xSign) {
+          points.push([x, interpolateX(x, start, end)]);
         }
       } else if (yDelta >= xDelta) {
-        for (y = start.y + ySign; y !== end.y; y += ySign) {
-          points.push({ x: interpolateY(y, start, end), y: y });
+        for (y = start[1] + ySign; y !== end[1]; y += ySign) {
+          points.push([interpolateY(y, start, end), y]);
         }
       }
       points.push(end);

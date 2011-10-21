@@ -36,7 +36,7 @@ define(['line'], function(Line) {
     if (this._down) {
       var graphics = this._graphics,
         color = this._color,
-        point = { x: x, y: y },
+        point = [x, y],
         line = new Line(point, this._last),
         points = line.interpolate(),
         radius = this._width / 2,

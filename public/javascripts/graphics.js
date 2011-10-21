@@ -9,7 +9,7 @@ define(function() {
     var context = this.context;
     context.fillStyle = color || '#000000';
     context.beginPath();
-    context.arc(center.x, center.y, radius, 0, TWO_PI, false);
+    context.arc(center[0], center[1], radius, 0, TWO_PI, false);
     context.fill();
     context.closePath();
   };

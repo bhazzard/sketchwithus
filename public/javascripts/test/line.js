@@ -3,68 +3,68 @@ require(['line'], function(Line) {
 
   test('default', function() {
     var line = new Line();
-    deepEqual(line.start, { x: 0, y: 0 }, 'start');
-    deepEqual(line.end, { x: 0, y: 0 }, 'end');
+    deepEqual(line.start, [0, 0], 'start');
+    deepEqual(line.end, [0, 0], 'end');
   });
   
   test('interpolate', function() {
-    var line = new Line({ x: 1, y: 1 });
-    deepEqual(line.interpolate(), [{ x: 1, y: 1 }], 'point');
+    var line = new Line([1, 1]);
+    deepEqual(line.interpolate(), [[1, 1]], 'point');
     
-    line = new Line({ x: 1, y: 1 }, { x: 3, y: 1 });
+    line = new Line([1, 1], [3, 1]);
     deepEqual(line.interpolate(), [
-      { x: 1, y: 1 },
-      { x: 2, y: 1 },
-      { x: 3, y: 1 }
+      [1, 1],
+      [2, 1],
+      [3, 1]
     ], 'horizontal');
     
-    line = new Line({ x: 1, y: 1 }, { x: 1, y: 3 });
+    line = new Line([1, 1], [1, 3]);
     deepEqual(line.interpolate(), [
-      { x: 1, y: 1 },
-      { x: 1, y: 2 },
-      { x: 1, y: 3 }
+      [1, 1],
+      [1, 2],
+      [1, 3]
     ], 'horizontal');
     
-    line = new Line({ x: 1, y: 1 }, { x: 5, y: 3 });
+    line = new Line([1, 1], [5, 3]);
     deepEqual(line.interpolate(), [
-      { x: 1, y: 1 },
-      { x: 2, y: 2 },
-      { x: 3, y: 2 },
-      { x: 4, y: 3 },
-      { x: 5, y: 3 }
+      [1, 1],
+      [2, 2],
+      [3, 2],
+      [4, 3],
+      [5, 3]
     ], 'mostly horizontal');
     
-    line = new Line({ x: 1, y: 1 }, { x: 3, y: 5 });
+    line = new Line([1, 1], [3, 5]);
     deepEqual(line.interpolate(), [
-      { x: 1, y: 1 },
-      { x: 2, y: 2 },
-      { x: 2, y: 3 },
-      { x: 3, y: 4 },
-      { x: 3, y: 5 }
+      [1, 1],
+      [2, 2],
+      [2, 3],
+      [3, 4],
+      [3, 5]
     ], 'mostly vertical');
     
-    line = new Line({ x: 1, y: 1 }, { x: 2, y: 2 });
+    line = new Line([1, 1], [2, 2]);
     deepEqual(line.interpolate(), [
-      { x: 1, y: 1 },
-      { x: 2, y: 2 }
+      [1, 1],
+      [2, 2]
     ], 'consecutive');
     
-    line = new Line({ x: 5, y: 3 }, { x: 1, y: 1 });
+    line = new Line([5, 3], [1, 1]);
     deepEqual(line.interpolate(), [
-      { x: 5, y: 3 },
-      { x: 4, y: 3 },
-      { x: 3, y: 2 },
-      { x: 2, y: 2 },
-      { x: 1, y: 1 }
+      [5, 3],
+      [4, 3],
+      [3, 2],
+      [2, 2],
+      [1, 1]
     ], 'reverse mostly horizontal');
     
-    line = new Line({ x: 3, y: 5 }, { x: 1, y: 1 });
+    line = new Line([3, 5], [1, 1]);
     deepEqual(line.interpolate(), [
-      { x: 3, y: 5 },
-      { x: 3, y: 4 },
-      { x: 2, y: 3 },
-      { x: 2, y: 2 },
-      { x: 1, y: 1 }
+      [3, 5],
+      [3, 4],
+      [2, 3],
+      [2, 2],
+      [1, 1]
     ], 'reverse mostly vertical');
   });
 });
