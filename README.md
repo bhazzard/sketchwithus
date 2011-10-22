@@ -62,7 +62,9 @@ Check out the code:
 git clone git@github.com:mdellanoce/sketchwithus.git
 </pre>
 
-Grab the Chef cookbooks:
+Vagrant will attempt to download the cookbooks automatically. If you are running vagrant on Windows
+[this won't work](https://github.com/mitchellh/vagrant/issues/532). You'll need to modify the Vagrantfile to
+load the cookbooks from the "cookbooks" path instead, then grab the Chef cookbooks from Github:
 
 <pre>
 cd sketchwithus
@@ -81,5 +83,7 @@ Login to the VM. If you are running vagrant on windows, see [vagrant-putty](http
 vagrant ssh
 </pre>
 
-The project is mounted at /vagrant in the VM. You can do your work from that directory and commit your changes from
-the host OS as you go.
+The project is mounted at /vagrant in the VM. For reasons that I don't understand, you will not be able to run
+npm install from /vagrant (something about it being a shared folder). So the recommended workflow is to make
+code changes on the host and run the app from the guest so that you know you are running on a production-like
+environment.
