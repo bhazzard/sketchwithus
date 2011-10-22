@@ -79,7 +79,6 @@ require(['artist', 'graphics', 'proxy', 'remote_graphics'], function(Artist, Gra
     });
     
     $(document).bind({
-      mousedown: mousedown,
       mouseup: mouseup
     });
 
