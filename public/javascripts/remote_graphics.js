@@ -19,9 +19,7 @@ define(['artist', 'graphics'], function (Artist, Graphics) {
       delete artists[id];
     });
 
-    emitter.on('draw', function(data) {
-      var packet = data.concat(),
-        id = packet.shift();
+    emitter.on('draw', function(id, packet) {
       artists[id].execute(packet);
     });
     
