@@ -11,9 +11,9 @@ Vagrant::Config.run do |config|
   config.vm.provision :chef_solo do |chef|
     chef.recipe_url = "http://cloud.github.com/downloads/mdellanoce/cookbooks/cookbooks.tar.gz"
     chef.cookbooks_path = [:vm, "cookbooks"]
-
     
     chef.add_recipe "vim"
+    chef.add_recipe "haproxy"
     chef.add_recipe "nodejs"
     chef.add_recipe "nodejs::canvas"
   end
