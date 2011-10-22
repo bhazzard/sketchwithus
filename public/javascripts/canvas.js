@@ -54,10 +54,9 @@ require(['artist', 'graphics', 'proxy', 'remote_graphics'], function(Artist, Gra
     context = canvas.getContext('2d');
     graphics = new Graphics(context);
     graphics = new Proxy(graphics, function(invocation) {
-      socket.emit('draw', {
-        method: invocation.method,
-        arguments: invocation.arguments
-      });
+      var packet = invocation.arguments.concat();
+      packet.unshift(invocation.method);
+      socket.emit('draw', packet);
       invocation.proceed();
     });
     artist = new Artist(graphics);

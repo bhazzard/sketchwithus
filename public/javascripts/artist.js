@@ -6,8 +6,8 @@ define(['pen'], function(Pen) {
   
   Artist.prototype.execute = function(command) {
     var graphics = this._graphics,
-      method = graphics[command.method];
-    method.apply(graphics, command.arguments);
+      method = graphics[command.shift()];
+    method.apply(graphics, command);
   };
 
   Artist.prototype.mousedown = function(x, y) {

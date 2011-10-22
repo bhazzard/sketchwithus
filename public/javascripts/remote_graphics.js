@@ -20,7 +20,9 @@ define(['artist', 'graphics'], function (Artist, Graphics) {
     });
 
     emitter.on('draw', function(data) {
-      artists[data.id].execute(data.command);
+      var packet = data.concat(),
+        id = packet.shift();
+      artists[id].execute(packet);
     });
     
     this._emitter = emitter;
