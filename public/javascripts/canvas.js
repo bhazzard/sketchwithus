@@ -94,6 +94,14 @@ require(['artist', 'graphics', 'proxy', 'remote_graphics'], function(Artist, Gra
       });
     });
 
+    $('#authentication-panel').bind('userLoggedOut', function(event, profile) {
+      socket.emit('logout');
+    });
+
+    socket.on('logout', function(arist_id) {
+      $('#authentication-panel').trigger('recievedLogout');
+    });
+
     $('#ink').ColorPicker({
       color: '#000000',
       flat: true,

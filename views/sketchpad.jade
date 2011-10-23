@@ -13,8 +13,9 @@ div(id="sketchoptions")
   div(id="ink")
 
 div(id="authentication-panel")
-  fb:login-button(perms="friends_online_presence,create_event") Login with Facebook
 
+script(type="text/template", id="login-template")
+  fb:login-button(perms="friends_online_presence,create_event") Login with Facebook
 
 script(type="text/template", id="user-template")
   | <div id="user-box" class="important user">
