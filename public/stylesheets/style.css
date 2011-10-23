@@ -25,25 +25,25 @@ a
 #logo {
   position: absolute;
   top: 0px;
-  left: 30px;
+  left: 0px;
 }
 
 #authentication-panel {
   position : absolute;
-  top : 150px;
-  left : 40px;
+  top : 155px;
+  left : 20px;
 }
 
 #sketch {
   position : absolute;
-  top : 150px;
-  left : 240px;
+  top : 155px;
+  left : 220px;
 }
 
 #sketchoptions {
   position : absolute;
-  top : 150px;
-  left : 1065px;
+  top : 155px;
+  left : 1045px;
   width: 150px;
   height: 480px;
   border: 1px black solid;
