@@ -102,10 +102,18 @@ require(['artist', 'graphics', 'proxy', 'remote_graphics'], function(Artist, Gra
       $('#authentication-panel').trigger('recievedLogout');
     });
 
-    $('#ink').ColorPicker({
+    $('#colorSelector').ColorPicker({
       color: '#000000',
-      flat: true,
+      onShow: function (colpkr) {
+        $(colpkr).fadeIn(500);
+        return false;
+      },
+      onHide: function (colpkr) {
+        $(colpkr).fadeOut(500);
+        return false;
+      },
       onChange: function (hsb, hex, rgb) {
+        $('#colorSelector div').css('backgroundColor', '#' + hex);
         artist.setColor(hex);
       }
     });
