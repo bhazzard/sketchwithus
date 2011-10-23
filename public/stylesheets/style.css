@@ -21,3 +21,18 @@ a
   height: 480px;
   border: 1px solid black;
 }
+
+#authentication-panel {
+  position : absolute;
+  top : 50px;
+  left : 50px;
+}
+
+#sketch {
+  position : absolute;
+  left : 250px;
+}
+#sketchoptions {
+  position : absolute;
+  left : 1100px;
+}
