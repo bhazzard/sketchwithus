@@ -9,8 +9,7 @@ Vagrant::Config.run do |config|
   config.vm.forward_port "http", 80, 8080
 
   config.vm.provision :chef_solo do |chef|
-    chef.recipe_url = "http://cloud.github.com/downloads/mdellanoce/cookbooks/cookbooks.tar.gz"
-    chef.cookbooks_path = [:vm, "cookbooks"]
+    chef.cookbooks_path = "../cookbooks"
     
     chef.add_recipe "vim"
     chef.add_recipe "haproxy"
