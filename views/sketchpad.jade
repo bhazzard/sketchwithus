@@ -27,7 +27,7 @@ script(type="text/template", id="loggedin-template")
   | <a class="logout-link" href="javascript:void(0)">Logout from Facebook</a>
 
 script(type="text/template", id="artist-template")
-  |<div class="artist">
+  |<div class="artist" id="<%= artist_id %>">
   |  <label for="<%=id%>">
   |    <img class="profile-image" height="36" width="36" src="http://graph.facebook.com/<%=id%>/picture" />
   |    <div><%= name %></div>

@@ -98,8 +98,8 @@ require(['artist', 'graphics', 'proxy', 'remote_graphics'], function(Artist, Gra
       socket.emit('logout');
     });
 
-    socket.on('logout', function(arist_id) {
-      $('#authentication-panel').trigger('recievedLogout');
+    socket.on('logout', function(artist_id) {
+      $('#authentication-panel').trigger('recievedLogout', artist_id);
     });
 
     $('#colorSelector').ColorPicker({
