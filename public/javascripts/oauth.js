@@ -6,19 +6,22 @@ $(function(){
     FB.api('/me', function(profile) {
       me = profile;
       $('#authentication-panel').trigger('userLoggedIn', profile);
-      var template = _.template($("#user-template").html());
-      $("#authentication-panel").html(template(profile)).show();
+      var template = _.template($("#loggedin-template").html());
+      $("#authentication-panel").html(template).show();
     });
   }
 
-  FB.init({ 
-    appId:'183470818398206', 
-    cookie:true, 
-    status:true, 
-    xfbml:true,
-    method: 'oauth',
-    response_type: 'token'
-  });
+  function init() {
+    FB.init({ 
+      appId:'183470818398206', 
+      cookie:true, 
+      status:true, 
+      xfbml:true,
+      method: 'oauth',
+      response_type: 'token'
+    });
+  }
+  init();
     
   FB.getLoginStatus(function(response) {
     if (response.status === "connected") {
@@ -36,12 +39,13 @@ $(function(){
     FB.logout(function(response) {
       $('#authentication-panel').trigger('userLoggedOut', me);
       $('#authentication-panel').html(_.template($("#login-template").html()));
+      init();
     });
   });
 
   $('#authentication-panel').bind('recievedLogin', function(event, artist){
     var template = _.template($("#artist-template").html());
-    $(this).append(template(artist));
+    $('#artists').append(template(artist));
   });
 
   $('#authentication-panel').bind('recievedLogout', function(event, artist){
