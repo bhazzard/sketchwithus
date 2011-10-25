@@ -20,21 +20,21 @@ $(function(){
       method: 'oauth',
       response_type: 'token'
     });
+
+    FB.getLoginStatus(function(response) {
+      if (response.status === "connected") {
+        $("#authentication-panel").show();
+        onLogin();
+      } else {
+        $("#authentication-panel").show();
+        FB.Event.subscribe('auth.login', function(auth) {
+          onLogin();
+        });
+      }              
+    });
   }
   init();
     
-  FB.getLoginStatus(function(response) {
-    if (response.status === "connected") {
-      $("#authentication-panel").show();
-      onLogin();
-    } else {
-      $("#authentication-panel").show();
-      FB.Event.subscribe('auth.login', function(auth) {
-        onLogin();
-      });
-    }              
-  });
-
   $('#authentication-panel').delegate('.logout-link', 'click', function() {
     FB.logout(function(response) {
       $('#authentication-panel').trigger('userLoggedOut', me);
