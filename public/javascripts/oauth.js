@@ -48,8 +48,7 @@ $(function(){
     $('#artists').append(template(artist));
   });
 
-  $('#authentication-panel').bind('recievedLogout', function(event, artist_id){
-console.log('kjawef');
+  $('#authentication-panel').bind('userLeft', function(event, artist_id){
     $('#' + artist_id).remove();
   });
 });
