@@ -16,7 +16,7 @@ div(id="sketchoptions")
   div(id="colorSelector")
     div(style="background-color: #000000")
   input(id="eraser", type="checkbox")
-  label(for="eraser") Eraser
+  label(for="eraser", text="Eraser")
 
 div(id="authentication-panel")
 

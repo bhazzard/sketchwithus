@@ -125,9 +125,7 @@ require(['artist', 'graphics', 'proxy', 'remote_graphics'], function(Artist, Gra
     $('#eraser').click(function(){
       if($(this).is(":checked")){
         artist.setColor("#FFFFFF");
-      } else {
-        artist.setColor("#000000");
-      }
+      };
     });
   };
   image.src = "/sketchpad/" + sketchpad_id + "/sketch.png";
