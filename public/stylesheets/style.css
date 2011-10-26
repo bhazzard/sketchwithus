@@ -15,13 +15,6 @@ a
   color: #00B7FF;
 }
 
-#sketch
-{
-  width: 800px;
-  height: 480px;
-  border: 1px solid black;
-}
-
 #logo {
   position: absolute;
   top: 0px;
@@ -37,10 +30,18 @@ a
   left : 20px;
 }
 
+#chat {
+  position: absolute;
+  top: 650px;
+}
+
 #sketch {
   position : absolute;
   top : 155px;
   left : 220px;
+  width: 800px;
+  height: 480px;
+  border: 1px solid black;
 }
 
 #sketchoptions {
