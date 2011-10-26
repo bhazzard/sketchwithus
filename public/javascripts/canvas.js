@@ -129,6 +129,10 @@ require(['artist', 'graphics', 'proxy', 'remote_graphics'], function(Artist, Gra
         artist.setColor("#000000");
       }
     });
+
+    $('#width').change(function() {
+      artist.setWidth($(this).val());
+    }).val(artist._pen.width());
   };
   image.src = "/sketchpad/" + sketchpad_id + "/sketch.png";
 });
