@@ -13,7 +13,7 @@
 
 (function($) {
   function appendChat(chat) {
-      $('#chat ul').append($('<li class="from ' + chat.id + '">' + chat.text + '<li>')); 
+      $('#chat ul').append($('<li class="from ' + chat.id + '">' + chat.text + '</li>')); 
   }
 
   $(document).ready(function() {
