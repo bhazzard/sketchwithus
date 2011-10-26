@@ -49,5 +49,9 @@ define(['pen'], function(Pen) {
     this._pen.setColor(hex);
   };
   
+  Artist.prototype.setWidth = function(width) {
+    this._pen.width(width);
+  };
+
   return Artist;
 });
