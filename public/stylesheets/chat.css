@@ -1,0 +1,23 @@
+#chat {
+  position: absolute;
+  top: 625px;
+  left: 220px;
+  width: 800px;
+}
+
+#chat ul {
+  height: 150px;
+  overflow-y: scroll;
+  border: 1px solid black;
+  margin-bottom: 0px;
+}
+
+
+#chat ul li {
+  list-style-type: none;
+  margin-left: 0px;
+}
+
+#chat input {
+  width: 800px;
+}

@@ -28,7 +28,9 @@
     });
 
     $('#chat ul').bind('chat', function(event, chat) {
+      var chats = $(this);
       appendChat(chat);
+      chats.scrollTop(chats.attr('scrollHeight'));
     });
   });
 })(jQuery);
