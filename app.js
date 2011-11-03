@@ -3,6 +3,7 @@
  */
 var express = require('express'),
     app = module.exports = express.createServer(),
+    io = require('socket.io').listen(app),
     argv = require('optimist').argv,
     SketchpadRepository = require('./lib/sketchpad/repository').Repository,
     EmitterRepository = require('./lib/emitters/repository').Repository,
@@ -51,7 +52,7 @@ app.get('/', function(req, res){
   }
 
   if (argv.chat) {
-    new ChatRoomService().run(app);
+    new ChatRoomService(io).run(app);
   }
 })();
 
