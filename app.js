@@ -7,6 +7,8 @@ var express = require('express'),
     SketchpadRepository = require('./lib/sketchpad/repository').Repository,
     EmitterRepository = require('./lib/emitters/repository').Repository,
     SketchpadService = require('./lib/sketchpad/module').Service,
+    ChatDirectoryService = require('./lib/chat/directory').DirectoryService,
+    ChatRoomService = require('./lib/chat/room').RoomService,
     ImageService = require('./lib/image/module').Service;
     
 // Configuration
@@ -46,6 +48,10 @@ app.get('/', function(req, res){
 
   if (argv.image) {
     new ImageService(sketchpads).run(app);
+  }
+
+  if (argv.chat) {
+    new ChatRoomService().run(app);
   }
 })();
 
