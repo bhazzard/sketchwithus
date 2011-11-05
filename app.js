@@ -8,8 +8,6 @@ var express = require('express'),
     SketchpadRepository = require('./lib/sketchpad/repository').Repository,
     EmitterRepository = require('./lib/emitters/repository').Repository,
     SketchpadService = require('./lib/sketchpad/module').Service,
-    ChatDirectoryService = require('./lib/chat/directory').DirectoryService,
-    ChatRoomService = require('./lib/chat/room').RoomService,
     ImageService = require('./lib/image/module').Service;
     
 // Configuration
@@ -52,7 +50,17 @@ app.get('/', function(req, res){
   }
 
   if (argv.chat) {
-    new ChatRoomService(io).run(app);
+    (function() {
+      var Api = require('./lib/chat/room/api'),
+          Messages = require('./lib/chat/room/messages'),
+          Repository = require('./lib/chat/room/repository'),
+          Hypertext = require('./lib/chat/room/hypertext'),
+          rooms = new Repository(),
+          hypertext = new Hypertext();
+
+      new Messages(rooms, io).listen();
+      new Api(rooms, hypertext, io).listen(app);
+    })();
   }
 })();
 
