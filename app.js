@@ -42,7 +42,7 @@ app.get('/', function(req, res){
   var sketchpads = new SketchpadRepository(emitters);
 
   if (argv.sketchpad) {
-    new SketchpadService(sketchpads, emitters).run(app);
+    new SketchpadService(sketchpads, emitters, io).run(app);
   }
 
   if (argv.image) {
