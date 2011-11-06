@@ -12,6 +12,8 @@ define(['artist', 'graphics', 'proxy', 'remote_graphics'], function(Artist, Grap
     this._image = image;
     image.onload = $.proxy(this, '_init');
     image.src = sketchpad.image;
+
+    sketch.trigger('sketch.initialized', sketchpad);
   };
  
   Canvas.prototype._init = function() {
