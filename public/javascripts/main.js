@@ -1,17 +1,15 @@
 require(['canvas'], function(Canvas) {
-  $('#authentication-panel').bind('userLoggedIn', function(event, profile) {
-    $.post('/sketchpad', function(data, status, xhr) {
-      var l = xhr.getResponseHeader('Location'),
-        path = l.split('/'),
-        id = path[path.length - 1];
-      var socket = io.connect('/' + id);
+  function onLogin(profile) {
+    return function(sketchpad) {
+      location.hash = '#' + sketchpad.self;
+
+      var socket = io.connect(sketchpad.socket);
       socket.emit('join');
       socket.emit('login', {
         id : profile.id,
         name : profile.name
       });
-      //set hash from location
-      //create canvas and socket
+
       socket.on('login', function(artists) {
         _.each(artists, function(artist) {
           $('#authentication-panel').trigger('recievedLogin', artist);
@@ -30,8 +28,18 @@ require(['canvas'], function(Canvas) {
         $('#authentication-panel').trigger('userLeft', artist_id);
       });
 
-      var canvas = new Canvas(socket, id);
-    });
-  });
+      var canvas = new Canvas(socket, sketchpad);
+    };
+  };
 
+  $('#authentication-panel').bind('userLoggedIn', function(event, profile) {
+    if (location.hash) {
+      var url = location.hash.indexOf('#') == 0 ?
+        location.hash.substring(1) :
+        location.hash;
+      $.getJSON(url, onLogin(profile));
+    } else {
+      $.post('/sketchpad', onLogin(profile));
+    }
+  });
 });

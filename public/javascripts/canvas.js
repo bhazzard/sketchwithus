@@ -1,6 +1,6 @@
 define(['artist', 'graphics', 'proxy', 'remote_graphics'], function(Artist, Graphics, Proxy, RemoteGraphics) {
-  function Canvas(socket, sketchpad_id) {
-    this._id = sketchpad_id;
+  function Canvas(socket, sketchpad) {
+    this._id = sketchpad.id;
     this._socket = socket;
 
     var sketch = $('#sketch');
@@ -11,7 +11,7 @@ define(['artist', 'graphics', 'proxy', 'remote_graphics'], function(Artist, Grap
     var image = new Image();
     this._image = image;
     image.onload = $.proxy(this, '_init');
-    image.src = "/sketchpad/" + sketchpad_id + "/sketch.png";
+    image.src = sketchpad.image;
   };
  
   Canvas.prototype._init = function() {
