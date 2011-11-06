@@ -1,111 +1,61 @@
-require(['artist', 'graphics', 'proxy', 'remote_graphics'], function(Artist, Graphics, Proxy, RemoteGraphics) {
-  var sketchpad_id= $('#sketchpad_id').attr('val');
+define(['artist', 'graphics', 'proxy', 'remote_graphics'], function(Artist, Graphics, Proxy, RemoteGraphics) {
+  function Canvas(socket, sketchpad_id) {
+    this._id = sketchpad_id;
+    this._socket = socket;
 
-  var socket = io.connect('/' + sketchpad_id),
-    sketch = $('#sketch'),
-    offsetX = sketch.offset().left,
-    offsetY = sketch.offset().top,
-    canvas,
-    context,
-    graphics,
-    artist;
+    var sketch = $('#sketch');
+    this._sketch = sketch;
+    this._offsetX = sketch.offset().left;
+    this._offsetY = sketch.offset().top;
   
-  function mousemove(event) {
-    var x = event.pageX - offsetX,
-      y = event.pageY - offsetY;
-    
-    artist.mousemove(x, y);
+    var image = new Image();
+    this._image = image;
+    image.onload = $.proxy(this, '_init');
+    image.src = "/sketchpad/" + sketchpad_id + "/sketch.png";
   };
-  
-  function mousedown(event) {
-    var x = event.pageX - offsetX,
-      y = event.pageY - offsetY;
-    
-    artist.mousedown(x, y);
-  };
-  
-  function mouseup(event) {
-    var x = event.pageX - offsetX,
-      y = event.pageY - offsetY;
-    
-    artist.mouseup(x, y);
-  };
-  
-  function mouseout(event) {
-    var x = event.pageX - offsetX,
-      y = event.pageY - offsetY;
-    
-    artist.mouseout(x, y);
-  };
-  
-  function mouseenter(event) {
-    var x = event.pageX - offsetX,
-      y = event.pageY - offsetY;
-    
-    artist.mouseenter(x, y);
-  };
-  
-  var image = new Image();
-  image.onload = function() {
-    canvas = document.createElement('canvas');
+ 
+  Canvas.prototype._init = function() {
+    var sketch = this._sketch;
+    var socket = this._socket;
+    var canvas = document.createElement('canvas');
     canvas.setAttribute('width', sketch.width());
     canvas.setAttribute('height', sketch.height());
     
-    context = canvas.getContext('2d');
-    graphics = new Graphics(context);
+    var context = canvas.getContext('2d');
+    var graphics = new Graphics(context);
     graphics = new Proxy(graphics, function(invocation) {
       var packet = invocation.arguments.concat();
       packet.unshift(invocation.method);
       socket.emit('draw', packet);
       invocation.proceed();
     });
-    artist = new Artist(graphics);
-    remote = new RemoteGraphics(sketchpad_id, socket);
+    var artist = new Artist(graphics);
+    remote = new RemoteGraphics(this._id, socket);
     socket = remote.listen(context);
     
-    context.drawImage(this, 0, 0);
+    context.drawImage(this._image, 0, 0);
     
     sketch.append(canvas);
     
     socket.emit('join');
     
+    this._canvas = canvas;
+    this._context = context;
+    this._graphics = graphics;
+    this._artist = artist;
+
     $(canvas).bind({
-      mousedown: mousedown,
-      mouseenter: mouseenter,
-      mousemove: mousemove,
-      mouseup: mouseup,
-      mouseout: mouseout
+      mousedown: $.proxy(this, 'mousedown'),
+      mouseenter: $.proxy(this, 'mouseenter'),
+      mousemove: $.proxy(this, 'mousemove'),
+      mouseup: $.proxy(this, 'mouseup'),
+      mouseout: $.proxy(this, 'mouseout')
     });
     
     $(document).bind({
-      mouseup: mouseup
+      mouseup: $.proxy(this, 'mouseup')
     });
-
-    $('#authentication-panel').bind('userLoggedIn', function(event, profile) {
-      socket.emit('login', {
-        id : profile.id,
-        name : profile.name
-      });
-    });
-
-    socket.on('login', function(artists) {
-      _.each(artists, function(artist) {
-        $('#authentication-panel').trigger('recievedLogin', artist);
-      });
-    });
-
-    $('#authentication-panel').bind('userLoggedOut', function(event, profile) {
-      socket.emit('logout');
-    });
-
-    socket.on('logout', function(artist_id) {
-      $('#authentication-panel').trigger('userLeft', artist_id);
-    });
-
-    socket.on('leave', function(artist_id) {
-      $('#authentication-panel').trigger('userLeft', artist_id);
-    });
-
+    
     $('#colorSelector').ColorPicker({
       color: '#000000',
       onShow: function (colpkr) {
@@ -134,5 +84,41 @@ require(['artist', 'graphics', 'proxy', 'remote_graphics'], function(Artist, Gra
       artist.setWidth($(this).val());
     }).val(artist._pen.width());
   };
-  image.src = "/sketchpad/" + sketchpad_id + "/sketch.png";
+ 
+  Canvas.prototype.mousemove = function(event) {
+    var x = event.pageX - this._offsetX,
+      y = event.pageY - this._offsetY;
+    
+    this._artist.mousemove(x, y);
+  };
+  
+  Canvas.prototype.mousedown = function(event) {
+    var x = event.pageX - this._offsetX,
+      y = event.pageY - this._offsetY;
+    
+    this._artist.mousedown(x, y);
+  };
+  
+  Canvas.prototype.mouseup = function(event) {
+    var x = event.pageX - this._offsetX,
+      y = event.pageY - this._offsetY;
+    
+    this._artist.mouseup(x, y);
+  };
+  
+  Canvas.prototype.mouseout = function(event) {
+    var x = event.pageX - this._offsetX,
+      y = event.pageY - this._offsetY;
+    
+    this._artist.mouseout(x, y);
+  };
+  
+  Canvas.prototype.mouseenter = function(event) {
+    var x = event.pageX - this._offsetX,
+      y = event.pageY - this._offsetY;
+    
+    this._artist.mouseenter(x, y);
+  };
+
+  return Canvas;
 });
