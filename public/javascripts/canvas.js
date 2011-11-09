@@ -1,4 +1,4 @@
-define(['artist', 'graphics', 'proxy', 'remote_graphics'], function(Artist, Graphics, Proxy, RemoteGraphics) {
+define(['artist', 'toolbox', 'graphics', 'proxy', 'remote_graphics'], function(Artist, Toolbox, Graphics, Proxy, RemoteGraphics) {
   function Canvas(socket, sketchpad) {
     this._id = sketchpad.id;
     this._socket = socket;
@@ -13,7 +13,7 @@ define(['artist', 'graphics', 'proxy', 'remote_graphics'], function(Artist, Grap
     image.onload = $.proxy(this, '_init');
     image.src = sketchpad.image;
 
-//    sketch.trigger('sketch.initialized', sketchpad);
+    sketch.trigger('sketch.initialized', sketchpad);
   };
  
   Canvas.prototype._init = function() {
@@ -58,22 +58,7 @@ define(['artist', 'graphics', 'proxy', 'remote_graphics'], function(Artist, Grap
       mouseup: $.proxy(this, 'mouseup')
     });
     
-    $('#colorstrip').colorstrip(function(hex) {
-      artist.setColor(hex);
-      $('#color').css('background-color', hex);
-    });
-
-    $('#eraser').click(function(){
-      if($(this).is(":checked")){
-        artist.setColor("#FFFFFF");
-      } else {
-        artist.setColor("#000000");
-      }
-    });
-
-    $('#width').change(function() {
-      artist.setWidth($(this).val());
-    }).val(artist._pen.width());
+    this._toolbox = new Toolbox(artist);
   };
  
   Canvas.prototype.mousemove = function(event) {

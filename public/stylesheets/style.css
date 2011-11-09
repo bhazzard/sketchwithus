@@ -39,36 +39,36 @@ a
   border: 1px solid black;
 }
 
-#sketchoptions {
+.toolbox {
+  padding: 15px;
   position : absolute;
   top : 155px;
-  left : 1045px;
-  width: 150px;
-  height: 480px;
-  border: 1px black solid;
-  border-radius: 15px;
+  left : 1020px;
+  width: 50px;
+  height: 450px;
+  border-top: 1px black solid;
+  border-right: 1px black solid;
+  border-bottom: 1px black solid;
   background-color: #e6e6e6;
 }
 
-#sketchoptions h3 {
-  margin: 15px;
+.toolbox a {
+  display: block;
 }
 
-#color {
+.color {
   position: relative;
-  margin: 15px;
   width: 36px;
   height: 36px;
   background-color: black;
 }
 
-#colorstrip {
+.colorstrip {
   width: 800px;
   height: 80px;
   position: absolute;
-  top: 630px;
+  top: 637px;
   left: 220px;
-  border: 1px solid black;
 }
 
 #login {
