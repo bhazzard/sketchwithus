@@ -11,13 +11,9 @@
 #colorstrip
 #chat
 
-script(type="text/template", id="login-template")
-  fb:login-button(perms="friends_online_presence,create_event") Start Sketchin'
-
 script(type="text/template", id="loggedin-template")
   | <h3>Sketching With:</h3>
   | <div id="artists"></div>
-  | <a class="logout-link" href="javascript:void(0)">Logout from Facebook</a>
 
 script(type="text/template", id="artist-template")
   |<div class="artist" id="<%= artist_id %>">

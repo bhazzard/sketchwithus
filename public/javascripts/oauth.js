@@ -1,6 +1,6 @@
 $(function(){
   var me = undefined;
-  $('#authentication-panel').html(_.template($("#login-template").html()));
+  $('#login').html(_.template($("#login-template").html()));
 
   function onLogin() {
     FB.api('/me', function(profile) {
@@ -35,12 +35,9 @@ $(function(){
   }
   init();
     
-  $('#authentication-panel').delegate('.logout-link', 'click', function() {
-    FB.logout(function(response) {
-      $('#authentication-panel').trigger('userLoggedOut', me);
-      $('#authentication-panel').html(_.template($("#login-template").html()));
-      init();
-    });
+  FB.Event.subscribe('auth.logout', function(auth) {
+    $('#authentication-panel').trigger('userLoggedOut', me);
+    init();
   });
 
   $('#authentication-panel').bind('recievedLogin', function(event, artist){

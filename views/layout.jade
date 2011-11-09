@@ -19,4 +19,7 @@ html
   body
     #fb-root
     #logo
+    #login
     != body
+    script#login-template(type="text/template")
+      fb:login-button(autologoutlink="true", perms="friends_online_presence,create_event")
