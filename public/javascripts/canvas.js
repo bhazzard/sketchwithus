@@ -58,7 +58,7 @@ define(['artist', 'graphics', 'proxy', 'remote_graphics'], function(Artist, Grap
       mouseup: $.proxy(this, 'mouseup')
     });
     
-    $('#colorstrip').colorstrip().bind('colorstripchange', function(e, hex) {
+    $('#colorstrip').colorstrip(function(hex) {
       artist.setColor(hex);
       $('#color').css('background-color', hex);
     });

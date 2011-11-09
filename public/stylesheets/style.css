@@ -63,6 +63,8 @@ a
 }
 
 #colorstrip {
+  width: 800px;
+  height: 80px;
   position: absolute;
   top: 630px;
   left: 220px;
