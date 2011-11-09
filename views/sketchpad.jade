@@ -1,16 +1,15 @@
 #sketch
 
-div(id="sketchoptions")
+#sketchoptions
   h3 Options
-  div(id="colorSelector")
-    div(style="background-color: #000000")
+  div(id="color")
   input(id="eraser", type="checkbox")
   label(for="eraser") Eraser
   input#width(type="range", min="1", max="25", step="1")
 
-div(id="authentication-panel")
-
-div(id="chat")
+#authentication-panel
+canvas#colorstrip(width="800", height="100")
+#chat
 
 script(type="text/template", id="login-template")
   fb:login-button(perms="friends_online_presence,create_event") Start Sketchin'
@@ -35,5 +34,4 @@ script(type="text/javascript", src="http://cdnjs.cloudflare.com/ajax/libs/unders
 script(type="text/javascript", src="https://raw.github.com/jeresig/jquery.hotkeys/master/jquery.hotkeys.js")
 script(type="text/javascript", src="/javascripts/chat.js") 
 
-link(rel="stylesheet", type="text/css", href="/plugins/colorpicker/css/colorpicker.css")
-script(type="text/javascript", src="/plugins/colorpicker/js/colorpicker.js")
+script(type="text/javascript", src="/plugins/colorstrip/colorstrip.min.js")

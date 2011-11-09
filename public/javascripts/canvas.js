@@ -13,7 +13,7 @@ define(['artist', 'graphics', 'proxy', 'remote_graphics'], function(Artist, Grap
     image.onload = $.proxy(this, '_init');
     image.src = sketchpad.image;
 
-    sketch.trigger('sketch.initialized', sketchpad);
+//    sketch.trigger('sketch.initialized', sketchpad);
   };
  
   Canvas.prototype._init = function() {
@@ -58,20 +58,9 @@ define(['artist', 'graphics', 'proxy', 'remote_graphics'], function(Artist, Grap
       mouseup: $.proxy(this, 'mouseup')
     });
     
-    $('#colorSelector').ColorPicker({
-      color: '#000000',
-      onShow: function (colpkr) {
-        $(colpkr).fadeIn(500);
-        return false;
-      },
-      onHide: function (colpkr) {
-        $(colpkr).fadeOut(500);
-        return false;
-      },
-      onChange: function (hsb, hex, rgb) {
-        $('#colorSelector div').css('backgroundColor', '#' + hex);
-        artist.setColor(hex);
-      }
+    $('#colorstrip').colorstrip().bind('colorstripchange', function(e, hex) {
+      artist.setColor(hex);
+      $('#color').css('background-color', hex);
     });
 
     $('#eraser').click(function(){
