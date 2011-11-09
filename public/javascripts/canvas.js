@@ -12,8 +12,6 @@ define(['artist', 'toolbox', 'graphics', 'proxy', 'remote_graphics'], function(A
     this._image = image;
     image.onload = $.proxy(this, '_init');
     image.src = sketchpad.image;
-
-    sketch.trigger('sketch.initialized', sketchpad);
   };
  
   Canvas.prototype._init = function() {

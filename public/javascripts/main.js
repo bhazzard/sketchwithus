@@ -1,4 +1,4 @@
-require(['canvas'], function(Canvas) {
+require(['canvas', 'chat'], function(Canvas, Chat) {
   function onLogin(profile) {
     return function(sketchpad) {
       location.hash = '#' + sketchpad.self;
@@ -29,6 +29,8 @@ require(['canvas'], function(Canvas) {
       });
 
       var canvas = new Canvas(socket, sketchpad);
+      var chat = new Chat();
+      chat.chatForSketchpad(sketchpad);
     };
   };
 
