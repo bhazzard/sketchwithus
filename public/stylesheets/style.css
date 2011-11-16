@@ -100,3 +100,14 @@ a
 .chat input {
   width: 800px;
 }
+
+#social {
+  position: absolute;
+  top : 155px;
+  right : 0px;
+  width : 150px;
+}
+
+.share {
+  margin-bottom : 10px;
+}
