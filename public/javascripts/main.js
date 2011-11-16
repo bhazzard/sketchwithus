@@ -29,8 +29,6 @@ require(['canvas'], function(Canvas, Chat) {
       });
 
       var canvas = new Canvas(socket, sketchpad);
-      var chat = new Chat();
-      chat.chatForSketchpad(sketchpad);
     };
   };
 
