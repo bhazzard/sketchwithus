@@ -15,6 +15,7 @@ Vagrant::Config.run do |config|
     chef.add_recipe "vim"
     chef.add_recipe "haproxy"
     chef.add_recipe "redis"
+    chef.add_recipe "monit"
     chef.add_recipe "nodejs"
     chef.add_recipe "nodejs::canvas"
   end
