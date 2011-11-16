@@ -1,4 +1,4 @@
-require(['canvas', 'chat'], function(Canvas, Chat) {
+require(['canvas'], function(Canvas, Chat) {
   function onLogin(profile) {
     return function(sketchpad) {
       location.hash = '#' + sketchpad.self;
