@@ -20,6 +20,35 @@ sudo make install
 
 That's it!
 
+# Monitoring
+
+Wherever you have the code checked out run:
+
+<pre>
+sudo ./install.sh
+</pre>
+
+This will configure scripts for upstart and monit. At this point
+the site should already be running. To test monit:
+
+<pre>
+ps aux | grep node
+</pre>
+
+Note the process ID for sketchwithus...
+
+<pre>
+kill -9 PID
+</pre>
+
+Then wait 15 seconds and sketchwithus should start up again:
+
+<pre>
+watch -n 1 "ps aux | grep node"
+</pre>
+
+Within 15 seconds, node should pop up into the list.
+
 # Getting started
 
 Check out the code:
