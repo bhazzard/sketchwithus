@@ -1,11 +1,10 @@
 body
 {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   background: url(/images/swu_green.png) no-repeat top center;
 }
 
-div
+body, div, ul, li
 {
   margin: 0;
   padding: 0;
@@ -94,12 +93,35 @@ a
 }
 
 #social {
+  width: 100%;
   position: absolute;
-  top : 155px;
-  right : 0px;
-  width : 150px;
+  bottom: 0px;
+  overflow: auto;
+  text-align: center;
+  background: #ffffff;
+  background: -moz-linear-gradient(left, #ffffff 0%, #dddddd 50%, #ffffff 100%); 
+  background: -webkit-gradient(linear, left top, right top, color-stop(0%,#ffffff), color-stop(50%,#dddddd), color-stop(100%,#ffffff));
+  background: -webkit-linear-gradient(left, #ffffff 0%,#dddddd 50%,#ffffff 100%);
+  background: -o-linear-gradient(left, #ffffff 0%,#dddddd 50%,#ffffff 100%);
+  background: -ms-linear-gradient(left, #ffffff 0%,#dddddd 50%,#ffffff 100%);
+  background: linear-gradient(left, #ffffff 0%,#dddddd 50%,#ffffff 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff',GradientType=1 );
 }
 
-.share {
-  margin-bottom : 10px;
+#social ul {
+  margin: 0 auto;
+  padding: 10px 0;
+  list-style-type: none;
+}
+
+#social li {
+  text-align: left;
+  display: inline-block;
+  height: 20px;
+  width: 90px;
+}
+
+#social iframe {
+  vertical-align: baseline !important;
+  height: 20px !important;
 }
