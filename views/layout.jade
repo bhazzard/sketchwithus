@@ -19,6 +19,10 @@ html
     #fb-root
     #container
       #header
-        fb:login-button(autologoutlink="true", perms="friends_online_presence,create_event")
-      != body
+        h1= title
+        fb:login-button#login(
+          autologoutlink="true",
+          perms="friends_online_presence,create_event")
+      #content
+        != body
     include social

@@ -1,7 +1,6 @@
 body
 {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  background: url(/images/swu_green.png) no-repeat top center;
 }
 
 body, div, ul, li
@@ -15,28 +14,58 @@ a
   color: #00B7FF;
 }
 
-#artists {
-  position : absolute;
-  top : 155px;
-  left : 20px;
+html, body, #container { height: 100%; }
+body > #container { height: auto; min-height: 100%; }
+
+#container {
+  margin: 0 auto;
+  width: 900px;
+}
+
+#header {
+  position: relative;
+  margin: 0 50px;
+}
+
+#header h1 {
+  margin: 0;
+  padding: 0;
+  text-indent: -9999px;
+  white-space: nowrap;
+  width: 100%;
+  height: 128px;
+  background: url(/images/swu_green.png) no-repeat top left;
+}
+
+#login {
+  position: absolute;
+  top: 53px;
+  right: 0;
+}
+
+#content {
+  position: relative;
+  padding: 0 50px 40px 50px;
 }
 
 #sketch {
-  position : absolute;
-  top : 128px;
-  left : 220px;
   width: 800px;
   height: 480px;
   border: 1px solid black;
 }
 
-.toolbox {
-  padding: 15px;
+.artists {
   position : absolute;
-  top : 128px;
-  left : 1020px;
+  top : 0;
+  left : 0;
+}
+
+.toolbox {
+  position : absolute;
+  top: 0;
+  right: 0;
   width: 50px;
-  height: 450px;
+  height: 480px;
   border-top: 1px black solid;
   border-right: 1px black solid;
   border-bottom: 1px black solid;
@@ -48,6 +77,7 @@ a
 }
 
 .color {
+  margin: 7px;
   position: relative;
   width: 36px;
   height: 36px;
@@ -57,15 +87,6 @@ a
 .colorstrip {
   width: 800px;
   height: 80px;
-  position: absolute;
-  top: 610px;
-  left: 220px;
-}
-
-#login {
-  position: absolute;
-  right: 0;
-  padding-right: 20px;
 }
 
 .chat {
@@ -93,9 +114,12 @@ a
 }
 
 #social {
+  clear: both;
+  position: relative;
+  z-index: 10;
+  height: 40px;
+  margin-top: -40px;
   width: 100%;
-  position: absolute;
-  bottom: 0px;
   overflow: auto;
   text-align: center;
   background: #ffffff;
