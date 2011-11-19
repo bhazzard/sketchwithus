@@ -1,13 +1,10 @@
 $(function(){
   var me = undefined;
-  $('#login').html(_.template($("#login-template").html()));
 
   function onLogin() {
     FB.api('/me', function(profile) {
       me = profile;
-      $('#authentication-panel').trigger('userLoggedIn', profile);
-      var template = _.template($("#loggedin-template").html());
-      $("#authentication-panel").html(template).show();
+      $('#artists').trigger('userLoggedIn', profile);
     });
   }
 
@@ -23,10 +20,10 @@ $(function(){
 
     FB.getLoginStatus(function(response) {
       if (response.status === "connected") {
-        $("#authentication-panel").show();
+        $("#artists").show();
         onLogin();
       } else {
-        $("#authentication-panel").show();
+        $("#artists").show();
         FB.Event.subscribe('auth.login', function(auth) {
           onLogin();
         });
@@ -36,16 +33,16 @@ $(function(){
   init();
     
   FB.Event.subscribe('auth.logout', function(auth) {
-    $('#authentication-panel').trigger('userLoggedOut', me);
+    $('#artists').trigger('userLoggedOut', me);
     init();
   });
 
-  $('#authentication-panel').bind('recievedLogin', function(event, artist){
+  $('#artists').bind('recievedLogin', function(event, artist){
     var template = _.template($("#artist-template").html());
     $('#artists').append(template(artist));
   });
 
-  $('#authentication-panel').bind('userLeft', function(event, artist_id){
+  $('#artists').bind('userLeft', function(event, artist_id){
     $('#' + artist_id).remove();
   });
 });

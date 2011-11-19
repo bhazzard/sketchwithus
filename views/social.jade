@@ -1,0 +1,34 @@
+#social
+  ul
+    li
+      div(class="fb-like",
+        data-send="false",
+        data-layout="button_count",
+        data-width="90",
+        data-show-faces="false")
+    li
+      a(href="https://twitter.com/share", class="twitter-share-button", data-count="none") Tweet 
+      script(type="text/javascript", src="//platform.twitter.com/widgets.js")
+    li
+      a(class="DiggThisButton DiggCompact")
+      script(type="text/javascript")
+        (function() {
+          var s = document.createElement('SCRIPT'), s1 = document.getElementsByTagName('SCRIPT')[0];
+          s.type = 'text/javascript';
+          s.async = true;
+          s.src = 'http://widgets.digg.com/buttons.js';
+          s1.parentNode.insertBefore(s, s1);
+        })();
+    li
+      script(src="http://www.stumbleupon.com/hostedbadge.php?s=2")
+    li
+      g:plusone(size="medium", annotation="none")
+      script(type="text/javascript")
+        (function() {
+          var po = document.createElement('script');
+          po.type = 'text/javascript';
+          po.async = true;
+          po.src = 'https://apis.google.com/js/plusone.js';
+          var s = document.getElementsByTagName('script')[0];
+          s.parentNode.insertBefore(po, s);
+        })();

@@ -1,5 +1,5 @@
+#artists
 #sketch
-#authentication-panel
 
 script(type="text/template", id="toolbox-template")
   | <div class="color"></div>
@@ -9,55 +9,12 @@ script(type="text/template", id="toolbox-template")
   | <a class="width" href="javascript:void(0);">Medium</a>
   | <a class="width" href="javascript:void(0);">Large</a>
 
-script(type="text/template", id="loggedin-template")
-  | <h3>Sketching With:</h3>
-  | <div id="artists"></div>
-
 script(type="text/template", id="artist-template")
-  |<div class="artist" id="<%= artist_id %>">
-  |  <label for="<%=id%>">
-  |    <img class="profile-image" height="36" width="36" src="http://graph.facebook.com/<%=id%>/picture" />
-  |    <div><%= name %></div>
-  |  </label>
-  |  <div style="clear:both"></div>
-  |</div>
+  | <div class="artist" id="<%= artist_id %>">
+  |   <img class="profile-image" height="36" width="36" src="http://graph.facebook.com/<%=id%>/picture" title="<%= name %>" />
+  | </div>
 
 script(type="text/javascript", src="http://cdnjs.cloudflare.com/ajax/libs/socket.io/0.8.4/socket.io.min.js")
 script(type="text/javascript", src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.1.7/underscore-min.js")
 script(type="text/javascript", src="/plugins/colorstrip/colorstrip.min.js")
 script(type="text/javascript", src="http://cdnjs.cloudflare.com/ajax/libs/require.js/0.26.0/require.min.js", data-main="/javascripts/main")
-
-#social
-  ul
-    li
-      div(class="fb-like",
-        data-send="false",
-        data-layout="button_count",
-        data-width="90",
-        data-show-faces="false")
-    li
-      a(href="https://twitter.com/share", class="twitter-share-button", data-count="none") Tweet 
-      script(type="text/javascript", src="//platform.twitter.com/widgets.js")
-    li
-      a(class="DiggThisButton DiggCompact")
-      script(type="text/javascript")
-        (function() {
-          var s = document.createElement('SCRIPT'), s1 = document.getElementsByTagName('SCRIPT')[0];
-          s.type = 'text/javascript';
-          s.async = true;
-          s.src = 'http://widgets.digg.com/buttons.js';
-          s1.parentNode.insertBefore(s, s1);
-        })();
-    li
-      script(src="http://www.stumbleupon.com/hostedbadge.php?s=2")
-    li
-      g:plusone(size="medium", annotation="none")
-      script(type="text/javascript")
-        (function() {
-          var po = document.createElement('script');
-          po.type = 'text/javascript';
-          po.async = true;
-          po.src = 'https://apis.google.com/js/plusone.js';
-          var s = document.getElementsByTagName('script')[0];
-          s.parentNode.insertBefore(po, s);
-        })();
