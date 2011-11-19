@@ -2,6 +2,7 @@ body
 {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background: url(/images/swu_green.png) no-repeat top center;
 }
 
 div
@@ -15,15 +16,6 @@ a
   color: #00B7FF;
 }
 
-#logo {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  height: 143px;
-  width: 600px;
-  background-image: url(/images/cheesy2.png);
-}
-
 #authentication-panel {
   position : absolute;
   top : 155px;
@@ -32,7 +24,7 @@ a
 
 #sketch {
   position : absolute;
-  top : 155px;
+  top : 128px;
   left : 220px;
   width: 800px;
   height: 480px;
