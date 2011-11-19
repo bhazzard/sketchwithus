@@ -12,8 +12,8 @@ define(function() {
   };
  
   Toolbox.prototype._create = function() {
-    this._colorstrip = $('<div />').addClass('colorstrip').appendTo('body');
-    this._toolbox = $('<div />').addClass('toolbox').appendTo('body');
+    this._colorstrip = $('<div />').addClass('colorstrip').appendTo('#container');
+    this._toolbox = $('<div />').addClass('toolbox').appendTo('#container');
   };
 
   Toolbox.prototype._init = function() {
