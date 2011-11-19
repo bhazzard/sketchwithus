@@ -55,6 +55,8 @@ define(['artist', 'toolbox', 'graphics', 'proxy', 'remote_graphics'], function(A
     $(document).bind({
       mouseup: $.proxy(this, 'mouseup')
     });
+
+    canvas.onselectstart = function() { return false; };
     
     this._toolbox = new Toolbox(artist);
   };
