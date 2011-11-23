@@ -6,7 +6,7 @@ $(function(){
       me = profile;
       $('#login').trigger('userLoggedIn', profile);
     });
-  }
+  };
 
   function init() {
     FB.init({ 
@@ -33,6 +33,10 @@ $(function(){
   FB.Event.subscribe('auth.logout', function(auth) {
     $('#login').trigger('userLoggedOut', me);
     init();
+  });
+
+  $('#login').bind('userLoggedIn', function() {
+    $('.fb_button_text', this).html('Facebook Logout');
   });
 
   $('#login').bind('recievedLogin', function(event, artist){
