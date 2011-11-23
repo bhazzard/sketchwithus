@@ -35,7 +35,7 @@ define(['artist', 'toolbox', 'graphics', 'proxy', 'remote_graphics'], function(A
     
     context.drawImage(this._image, 0, 0);
     
-    sketch.append(canvas);
+    sketch.html(canvas);
     
     socket.emit('join');
     
