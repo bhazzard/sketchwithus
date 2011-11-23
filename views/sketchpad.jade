@@ -31,6 +31,13 @@ script(type="text/template", id="artist-template")
   |   <img class="profile-image" height="36" width="36" src="http://graph.facebook.com/<%=id%>/picture" title="<%= name %>" />
   | </div>
 
+script(type="text/template", id="invite-template")
+  | <div class="invitation">
+  |   <p>Send this link to your friends so they can draw with you.</p>
+  |   <input type="text" value="<%=href%>" />
+  |   <button class='simplemodal-close'>Close</button>
+  | </div>
+
 script(type="text/javascript", src="http://cdnjs.cloudflare.com/ajax/libs/socket.io/0.8.4/socket.io.min.js")
 script(type="text/javascript", src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.1.7/underscore-min.js")
 script(type="text/javascript", src="/plugins/colorstrip/colorstrip.min.js")

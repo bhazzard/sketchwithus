@@ -57,4 +57,12 @@ $(function(){
   $('#login').bind('userLeft', function(event, artist_id){
     $('#' + artist_id).remove();
   });
+
+  $('#content').delegate('.invite', 'click', function() {
+    var template = _.template($("#invite-template").html()),
+      content = template(location);
+    $.modal(content, {
+      close: false
+    });
+  });
 });
