@@ -46,7 +46,11 @@ $(function(){
 
   $('#login').bind('recievedLogin', function(event, artist){
     var template = _.template($("#artist-template").html()),
+      artists = $('.artists');
+    if (!artists.length) {
       artists = $('<div />').addClass('artists').appendTo('#content');
+      artists.append('<a class="invite" title="Invite a friend to sketch with">Invite</a>');
+    }
     artists.append(template(artist));
   });
 

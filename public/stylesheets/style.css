@@ -162,3 +162,11 @@ body > #container { height: auto; min-height: 100%; }
   vertical-align: baseline !important;
   height: 20px !important;
 }
+
+.invite {
+  cursor: pointer;
+}
+
+.profile-image {
+  margin: 4px 0;
+}
