@@ -39,6 +39,11 @@ $(function(){
     $('.fb_button_text', this).html('Facebook Logout');
   });
 
+  $('#login').bind('userLoggedOut', function() {
+    //Ghetto redirect for now
+    window.location = '/';
+  });
+
   $('#login').bind('recievedLogin', function(event, artist){
     var template = _.template($("#artist-template").html()),
       artists = $('<div />').addClass('artists').appendTo('#content');
