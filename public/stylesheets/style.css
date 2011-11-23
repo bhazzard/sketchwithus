@@ -54,6 +54,19 @@ body > #container { height: auto; min-height: 100%; }
   border: 1px solid black;
 }
 
+#welcome {
+  padding: 50px;
+}
+
+#welcome h1 {
+  margin: 0;
+  padding: 0;
+}
+
+#welcome ul {
+  margin-left: 40px;
+}
+
 .artists {
   position : absolute;
   top : 0;
