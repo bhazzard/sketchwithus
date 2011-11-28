@@ -1,74 +1,95 @@
-define(function() {
-  function Chat() {
-    this._create();
-    this._init();
-  };
+(function() {
+  function loadScript(url, callback) {
+    var head = document.getElementsByTagName("head")[0],
+        script = document.createElement("script"),
+        done = false;
 
-  Chat.prototype._create = function() {
-    this._chat = $('<div />').addClass('chat').appendTo('body');
-    this._messages = $('<ul />').appendTo(this._chat);
-    this._input = $('<input />').attr('type', 'text').appendTo(this._chat);
-  };
+    script.src = url;
 
-  Chat.prototype._init = function() {
-    var chat = this._chat,
-      messages = this._messages,
-      input = this._input;
+    // Attach event handlers for all browsers
+    script.onload = script.onreadystatechange = function(){
+      if (!done && (!this.readyState || this.readyState == "loaded" || this.readyState == "complete")) {
+        done = true;
+        callback(); // execute callback function
 
-    chat.bind('chat.incoming', function appendAndScroll(event, chat) {
-      messages
-        .append($('<li class="from ' + chat.id + '"><strong>' + chat.id + ':</strong> ' + chat.text + '</li>'))
-        .scrollTop(messages.attr('scrollHeight'));
-    });
+        // Prevent memory leaks in IE
+        script.onload = script.onreadystatechange = null;
+        head.removeChild(script);
+      }
+    };
+    head.appendChild(script);
+  }
 
-    input.bind('keyup', 'return', function triggerChatEvents() {
-      chat.trigger('chat.incoming', { id: 'me', text: this.value });
-      chat.trigger('chat.outgoing', { id: 'me', text: this.value });
-      this.value = '';
-    });
-  };
+  function run() {
+    var socket = io.connect('sketchwith.us:8000'),
+        dom = {};
 
-  Chat.prototype.chatForSketchpad = function(sketchpad) {
-    var self = this;
-    self.joinRoom('/rooms/' + sketchpad.id, function notFound(roomUrl) {
-      $.ajax({
-        url: roomUrl,
-        type: 'PUT',
-        data: {
-          name: 'Chatroom for Sketchpad (' + sketchpad.id + ')'
-        },
-        success: function(data, status, xhr) {
-          self.joinRoom(xhr.getResponseHeader('location'), function notFound(roomUrl) {
-            throw "Room Not Found";
-          });
+      dom.chat = $('<div />').addClass('chat').appendTo('body');
+      dom.messages = $('<ul />').appendTo(dom.chat);
+      dom.input = $('<input />').attr('type', 'text').appendTo(dom.chat);
+
+    (function incoming() {
+      socket.on('system message', function(message) {
+         dom.messages
+          .append($('<li class="system">' + message + '</li>'))
+          .scrollTop(dom.messages.attr('scrollHeight'));
+      });
+
+      var profile = (function(socket) {
+        var profiles = {};
+
+        socket.on('profile update', function(profile) {
+          profiles[profile.id] = profile;
+        });
+
+        return function(id) {
+          return profiles[id];
+        };
+      })(socket);
+
+      socket.on('chat', function(chat) {
+        dom.messages
+          .append($('<li class="from ' + chat.id+ '"><strong>' + profile(chat.id).nickname + ':</strong> ' + chat.text + '</li>'))
+          .scrollTop(dom.messages.attr('scrollHeight'));
+      });
+    })();
+
+    (function outgoing() {
+      socket.emit('join', { room: location.href }, function(context) {
+        alert('You are joining ' + context.room + ' as ' + context.profile.nickname);
+      });
+
+      dom.input.keydown(function(e) {
+        var code = (e.keyCode ? e.keyCode : e.which);
+        if (code == '13') {
+          socket.emit('chat', this.value);
+          this.value = '';
         }
       });
-    });
-  };
+    })();
+  }
 
-  Chat.prototype.joinRoom = function(roomUrl, notFound) {
-    var chat = this._chat;
-    $.ajax({
-      url: roomUrl, 
-      type: 'GET',
-      success: function(room) {
-        var socket = io.connect(room.links.messages.href);
-  
-        socket.on('chat', function(chat) {
-          chat.trigger('chat.incoming', chat);
-        });
+  function loadDependencies(callback) {
+    var jq = false,
+        si = false;
 
-        chat.bind('chat.outgoing', function(event, data) {
-          socket.emit('chat', data.text);
-        });
-      },
-      error: function(res) {
-        if (res.status == 404) {
-          notFound(roomUrl);
-        }
+    function init() {
+      if (jq && si) {
+        callback();
       }
-    });
-  };
+    }
 
-  return Chat;
-});
+    loadScript("http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js", function() {
+      jq = true;
+      init();
+    });
+    loadScript("http://cdnjs.cloudflare.com/ajax/libs/socket.io/0.8.4/socket.io.min.js", function() {
+      si = true;
+      init();
+    });
+  }
+
+  loadDependencies(function() {
+    $(run);
+  });
+})();

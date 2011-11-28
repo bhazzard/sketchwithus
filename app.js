@@ -48,20 +48,6 @@ app.get('/', function(req, res){
   if (argv.image) {
     new ImageService(sketchpads).run(app);
   }
-
-  if (argv.chat) {
-    (function() {
-      var Api = require('./lib/chat/room/api'),
-          Messages = require('./lib/chat/room/messages'),
-          Repository = require('./lib/chat/room/repository'),
-          Hypertext = require('./lib/chat/room/hypertext'),
-          rooms = new Repository(),
-          hypertext = new Hypertext();
-
-      new Messages(rooms, io).listen();
-      new Api(rooms, hypertext, io).listen(app);
-    })();
-  }
 })();
 
 app.listen(argv.port || 8000);
