@@ -45,7 +45,7 @@ body > #container { height: auto; min-height: 100%; }
 
 #content {
   position: relative;
-  padding: 0 50px 40px 50px;
+  padding: 0 50px;
 }
 
 #sketch {
@@ -137,40 +137,12 @@ body > #container { height: auto; min-height: 100%; }
 }
 
 #social {
-  clear: both;
-  position: relative;
+  position: absolute;
+  top: 0;
+  right: 0;
   z-index: 10;
-  height: 40px;
-  margin-top: -40px;
-  width: 100%;
-  overflow: auto;
-  text-align: center;
-  background: #ffffff;
-  background: -moz-linear-gradient(left, #ffffff 0%, #dddddd 50%, #ffffff 100%); 
-  background: -webkit-gradient(linear, left top, right top, color-stop(0%,#ffffff), color-stop(50%,#dddddd), color-stop(100%,#ffffff));
-  background: -webkit-linear-gradient(left, #ffffff 0%,#dddddd 50%,#ffffff 100%);
-  background: -o-linear-gradient(left, #ffffff 0%,#dddddd 50%,#ffffff 100%);
-  background: -ms-linear-gradient(left, #ffffff 0%,#dddddd 50%,#ffffff 100%);
-  background: linear-gradient(left, #ffffff 0%,#dddddd 50%,#ffffff 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff',GradientType=1 );
-}
-
-#social ul {
-  margin: 0 auto;
-  padding: 10px 0;
-  list-style-type: none;
-}
-
-#social li {
-  text-align: left;
-  display: inline-block;
-  height: 20px;
-  width: 90px;
-}
-
-#social iframe {
-  vertical-align: baseline !important;
-  height: 20px !important;
+  width: 140px;
+  padding: 4px 0;
 }
 
 .invite {
