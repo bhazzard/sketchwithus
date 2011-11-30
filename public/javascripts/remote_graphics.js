@@ -8,10 +8,11 @@ define(['artist', 'graphics'], function (Artist, Graphics) {
   RemoteGraphics.prototype.listen = function(context) {
     var emitter= this._emitter,
       artists = this.artists;
-    
-    emitter.on('join', function(ids) {
-      for (var i = 0; i < ids.length; i++) {
-        artists[ids[i]] = new Artist(new Graphics(context));
+   
+    //a is 'Artists' - blame hazzard 
+    emitter.on('login', function(a) {
+      for (var i = 0; i < a.length; i++) {
+        artists[a[i].id] = new Artist(new Graphics(context));
       }
     });
 
