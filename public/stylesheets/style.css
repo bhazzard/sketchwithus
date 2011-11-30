@@ -77,20 +77,30 @@ body > #container { height: auto; min-height: 100%; }
   position : absolute;
   top: 0;
   right: 0;
-  width: 50px;
-  height: 480px;
-  border-top: 1px black solid;
-  border-right: 1px black solid;
-  border-bottom: 1px black solid;
-  background-color: #e6e6e6;
 }
 
 .toolbox a {
   display: block;
+  width: 36px;
+  height: 36px;
+  margin: 0;
+  padding: 0;
+  text-indent: -9999px;
+  white-space: nowrap;
+  background: none no-repeat top left;
+  background-image: url(/images/toolbox.png);
 }
 
+/* Need to link back to
+ * http://www.designcontest.com/free-outline-icons/
+ */
+.toolbox a.large { background-position: 0px 0px; }
+.toolbox a.medium { background-position: 0px -36px; }
+.toolbox a.small { background-position: 0px -64px; }
+.toolbox a.pen { background-position: 0px -142px; }
+.toolbox a.eraser { background-position: 0px -108px; }
+
 .color {
-  margin: 7px;
   position: relative;
   width: 36px;
   height: 36px;
