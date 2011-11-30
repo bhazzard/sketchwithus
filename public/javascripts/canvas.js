@@ -5,8 +5,7 @@ define(['artist', 'toolbox', 'graphics', 'proxy', 'remote_graphics'], function(A
 
     var sketch = $('#sketch');
     this._sketch = sketch;
-    this._offsetX = sketch.offset().left;
-    this._offsetY = sketch.offset().top;
+    this.calculateOffsets();
   
     var image = new Image();
     this._image = image;
@@ -59,6 +58,12 @@ define(['artist', 'toolbox', 'graphics', 'proxy', 'remote_graphics'], function(A
     canvas.onselectstart = function() { return false; };
     
     this._toolbox = new Toolbox(artist);
+  };
+
+  Canvas.prototype.calculateOffsets = function() {
+    var sketch = this._sketch;
+    this._offsetX = sketch.offset().left;
+    this._offsetY = sketch.offset().top;
   };
  
   Canvas.prototype.mousemove = function(event) {

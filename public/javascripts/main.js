@@ -29,6 +29,10 @@ require(['canvas'], function(Canvas, Chat) {
       });
 
       var canvas = new Canvas(socket, sketchpad);
+
+      $(window).resize(function() {
+        canvas.calculateOffsets();
+      });
     };
   };
 
