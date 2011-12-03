@@ -10,7 +10,7 @@
       join: function(context) {
         alert('You are joining ' + context.room + ' as ' + context.profile.nickname);
       },
-      recieve: function(chat) {
+      receive: function(chat) {
         dom.messages
           .append($('<li class="from ' + chat.id+ '"><strong>' + chat.profile.nickname + ':</strong> ' + chat.text + '</li>'))
           .scrollTop(dom.messages.attr('scrollHeight'));

@@ -10,7 +10,10 @@
     script.onload = script.onreadystatechange = function(){
       if (!done && (!this.readyState || this.readyState == "loaded" || this.readyState == "complete")) {
         done = true;
-        callback(); // execute callback function
+
+        if (typeof callback === "function") {
+          callback(); // execute callback function
+        }
 
         // Prevent memory leaks in IE
         script.onload = script.onreadystatechange = null;
@@ -41,6 +44,8 @@
   }
 
   loadDependencies(function() {
-    loadScript("http://sketchwith.us:8000/public/plugins/chat-embedded.js");
+    loadScript("http://sketchwith.us:8000/plugins/chat/chat.js", function() {
+      loadScript("http://sketchwith.us:8000/plugins/chat/embedded.js");
+    });
   });
 })();

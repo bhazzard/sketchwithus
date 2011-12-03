@@ -1,10 +1,11 @@
 (function(exports) {
   var socket = io.connect('sketchwith.us:8000'),
-    receive = system = join = function() {},
+    receive = system = join = profile = function() {},
     external = function(params) {
       receive = params.receive || receive;
       system = params.system || system;
       join = params.join || join;
+      profile = params.profile || profile;
 
       init(socket);
 
@@ -14,8 +15,9 @@
     };
 
   function init(socket) {
-    socket.on('system message', systemMessage);
+    socket.on('system message', system);
     socket.on('chat', receive); 
+    socket.on('profile', profile); 
     socket.emit('join', { room: location.href }, join);
   }
 

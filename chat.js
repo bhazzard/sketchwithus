@@ -38,7 +38,7 @@ io.sockets.on('connection', function(socket) {
 
   socket.on('chat', function(message) {
     socket.get('context', function(err, context) {
-      io.sockets.in(context.room).emit('chat', { id: context.profile.id, text: message });
+      io.sockets.in(context.room).emit('chat', { profile: context.profile, text: message });
     });
   });
 });
