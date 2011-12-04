@@ -1,26 +1,14 @@
 (function(exports) {
+  var head = document.getElementsByTagName("head")[0];
+
   function loadScript(url, callback) {
-    var head = document.getElementsByTagName("head")[0],
-        script = document.createElement("script");
+    var script = document.createElement("script");
 
     script.src = url;
 
     tellMeWhenItsDone(script, callback);
 
     head.appendChild(script);
-  }
-
-  function loadStyle(url, callback) {
-    var head = document.getElementsByTagName("head")[0],
-        style = document.createElement("link");
-
-    style.rel = 'stylesheet';
-    style.type = 'text/css';
-    style.href = url;
-
-    tellMeWhenItsDone(style, callback);
-
-    head.appendChild(style);
   }
 
   function tellMeWhenItsDone(resource, callback) {
