@@ -1,0 +1,48 @@
+.chat {
+  position: absolute;
+  top: 50px;
+  left: -341px;
+  z-index: 200;
+}
+
+.chat .toggle {
+  z-index: 100;
+  display: block;
+  position: absolute;
+  top: 50px;
+  right: -65px;
+  margin: 0px;
+  width: 92px;
+  height: 40px;
+  -webkit-transform: rotate(90deg); 
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+
+.chat ul {
+  margin: 5px;
+  padding: 2px;
+
+  height: 300px;
+  width: 325px;
+
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 5px;
+
+  list-style: none;
+  overflow-y: scroll;
+}
+
+.chat li {
+  margin: 0px;
+  padding: 0px;
+}
+
+.chat input {
+  margin: 5px;
+
+  width: 300px;
+}

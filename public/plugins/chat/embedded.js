@@ -1,18 +1,15 @@
 (function(chat, $) {
   $(function() {
-    var dom = {};
-
-    dom.chat = $('<div />').addClass('chat').appendTo('body');
+    var dom = dom || {};
+    dom.chat = dom.chat || $('<div />').addClass('chat').appendTo('body');
+    dom.toggle = dom.toggle || $('<div />').addClass('toggle').appendTo(dom.chat);
     dom.messages = $('<ul />').appendTo(dom.chat);
     dom.input = $('<input />').attr('type', 'text').appendTo(dom.chat);
 
-    var send = chat({
-      join: function(context) {
-        alert('You are joining ' + context.room + ' as ' + context.profile.nickname);
-      },
-      receive: function(chat) {
+    var send = chat.init({
+      receive: function(incoming) {
         dom.messages
-          .append($('<li class="from ' + chat.id+ '"><strong>' + chat.profile.nickname + ':</strong> ' + chat.text + '</li>'))
+          .append($('<li class="from ' + incoming.id+ '"><strong>' + incoming.profile.nickname + ':</strong> ' + incoming.text + '</li>'))
           .scrollTop(dom.messages.attr('scrollHeight'));
       },
       system: function(message) {
@@ -28,6 +25,10 @@
         send(this.value);
         this.value = '';
       }
+    });
+
+    dom.toggle.click(function() {
+      chat.toggle();
     });
   });
 })(chat, jQuery);

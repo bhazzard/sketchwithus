@@ -1,26 +1,43 @@
-(function() {
+(function(exports) {
   function loadScript(url, callback) {
     var head = document.getElementsByTagName("head")[0],
-        script = document.createElement("script"),
-        done = false;
+        script = document.createElement("script");
 
     script.src = url;
 
-    // Attach event handlers for all browsers
-    script.onload = script.onreadystatechange = function(){
+    tellMeWhenItsDone(script, callback);
+
+    head.appendChild(script);
+  }
+
+  function loadStyle(url, callback) {
+    var head = document.getElementsByTagName("head")[0],
+        style = document.createElement("link");
+
+    style.rel = 'stylesheet';
+    style.type = 'text/css';
+    style.href = url;
+
+    tellMeWhenItsDone(style, callback);
+
+    head.appendChild(style);
+  }
+
+  function tellMeWhenItsDone(resource, callback) {
+    var done = false;
+
+    resource.onload = resource.onreadystatechange = function(){
       if (!done && (!this.readyState || this.readyState == "loaded" || this.readyState == "complete")) {
         done = true;
 
         if (typeof callback === "function") {
-          callback(); // execute callback function
+          callback();
         }
 
-        // Prevent memory leaks in IE
-        script.onload = script.onreadystatechange = null;
-        head.removeChild(script);
+        resource.onload = resource.onreadystatechange = null;
+        head.removeChild(resource);
       }
     };
-    head.appendChild(script);
   }
 
   function loadDependencies(callback) {
@@ -43,9 +60,28 @@
     });
   }
 
+  var chatShowing= false;
+  function toggle() {
+
+    if (!chatShowing) {
+      $('.chat').animate({ 'left': '+=341px' });
+      $('.chat input').focus();
+      chatShowing = true;
+    } else {
+      $('.chat').animate({ 'left': '-=341px' });
+      $('.chat input').blur();
+      chatShowing = false;
+    }
+  }
+
   loadDependencies(function() {
     loadScript("http://sketchwith.us:8000/plugins/chat/chat.js", function() {
-      loadScript("http://sketchwith.us:8000/plugins/chat/embedded.js");
+      loadScript("http://sketchwith.us:8000/plugins/chat/embedded.js", function() {
+        chatLoaded = true;
+      });
     });
   });
-})();
+
+  exports.chat = exports.chat || {};
+  exports.chat.toggle = toggle;
+})(window);

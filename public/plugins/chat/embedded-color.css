@@ -1,0 +1,13 @@
+.chat {
+  background-color: #454545;
+}
+
+.chat ul {
+  background-color: white;
+  border-color: #C3C3C3;
+}
+
+.chat .toggle {
+  background-image: url('toggle.jpeg');
+}
+
