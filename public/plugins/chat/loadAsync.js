@@ -11,6 +11,19 @@
     head.appendChild(script);
   }
 
+  function loadStyle(url, callback) {
+    var link = document.createElement("link");
+
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = url;
+
+    tellMeWhenItsDone(link, callback);
+
+    head.appendChild(link);
+  }
+
+
   function tellMeWhenItsDone(resource, callback) {
     var done = false;
 
@@ -63,6 +76,8 @@
   }
 
   loadDependencies(function() {
+    loadStyle('http://sketchwith.us:8000/plugins/chat/embedded-layout.css');
+    loadStyle('http://sketchwith.us:8000/plugins/chat/embedded-color.css');
     loadScript("http://sketchwith.us:8000/plugins/chat/chat.js", function() {
       loadScript("http://sketchwith.us:8000/plugins/chat/embedded.js", function() {
         chatLoaded = true;
