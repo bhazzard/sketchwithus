@@ -33,4 +33,26 @@ require(['canvas'], function(Canvas, Chat) {
       $.getJSON(url, onStart());
     }
   });
+
+  $('#content').delegate('.invite', 'click', function() {
+    var template = _.template($("#invite-template").html()),
+      content = template(location);
+    $.modal(content, {
+      close: false
+    });
+  });
+
+  $('#login').bind('recievedLogin', function(event, artist){
+    var template = _.template($("#artist-template").html()),
+      artists = $('.artists');
+    if (!artists.length) {
+      artists = $('<div />').addClass('artists').appendTo('#content');
+      artists.append('<a class="invite" title="Invite a friend to sketch with">Invite</a>');
+    }
+    artists.append(template(artist));
+  });
+
+  $('#login').bind('userLeft', function(event, artist_id){
+    $('#' + artist_id).remove();
+  });
 });

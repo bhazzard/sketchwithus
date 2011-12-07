@@ -3,10 +3,8 @@ html
     meta(http-equiv="X-UA-Compatible", content="IE=edge")
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
-    script(type="text/javascript", src="http://connect.facebook.net/en_US/all.js")
     script(type="text/javascript", src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js")
     script(type="text/javascript", src="/plugins/simplemodal/jquery.simplemodal.1.4.1.min.js")
-    script(type="text/javascript", src="/javascripts/oauth.js") 
     script(type="text/javascript")
       var _gaq = _gaq || [];
       _gaq.push(['_setAccount', 'UA-26512248-1']);
@@ -21,7 +19,6 @@ html
     #container
       #header
         h1= title
-        fb:login-button#login(autologoutlink="true") Sketch With Friends
         include social
       #content
         != body
