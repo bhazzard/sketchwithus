@@ -180,3 +180,14 @@ body > #container { height: auto; min-height: 100%; }
 .invitation button {
   margin: 1em 0;
 }
+
+#start {
+  text-align: center;
+}
+
+#start input {
+  width: 200px;
+  height: 80px;
+  font-size: 18px;
+  font-weight: bold;
+}
