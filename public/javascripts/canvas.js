@@ -55,7 +55,10 @@ define(['artist', 'toolbox', 'graphics', 'proxy', 'remote_graphics'], function(A
     });
     
     $(document).bind({
-      mouseup: $.proxy(this, 'mouseup')
+      mouseup: $.proxy(this, 'mouseup'),
+      touchmove: function(event) {
+        event.preventDefault();
+      }
     });
 
     canvas.onselectstart = function() { return false; };
