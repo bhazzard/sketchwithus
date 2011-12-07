@@ -1,31 +1,16 @@
 require(['canvas'], function(Canvas, Chat) {
-  function onLogin(profile) {
+  function onStart() {
     return function(sketchpad) {
       location.hash = '#' + sketchpad.self;
 
       var socket = io.connect(sketchpad.socket);
       socket.emit('join');
-      socket.emit('login', {
-        id : profile.id,
-        name : profile.name
-      });
+      socket.emit('login');
 
       socket.on('login', function(artists) {
         _.each(artists, function(artist) {
-          $('#login').trigger('recievedLogin', artist);
+          console.log(artist);
         });
-      });
-
-      $('#login').bind('userLoggedOut', function(event, profile) {
-        socket.emit('logout');
-      });
-
-      socket.on('logout', function(artist_id) {
-        $('#login').trigger('userLeft', artist_id);
-      });
-
-      socket.on('leave', function(artist_id) {
-        $('#login').trigger('userLeft', artist_id);
       });
 
       var canvas = new Canvas(socket, sketchpad);
@@ -36,14 +21,16 @@ require(['canvas'], function(Canvas, Chat) {
     };
   };
 
-  $('#login').bind('userLoggedIn', function(event, profile) {
-    if (location.hash) {
+  $('#start').click(function(event, profile) {
+      $.post('/sketchpad', onStart());
+  });
+
+  $(document).ready(function(){
+    if(location.hash){
       var url = location.hash.indexOf('#') == 0 ?
         location.hash.substring(1) :
         location.hash;
-      $.getJSON(url, onLogin(profile));
-    } else {
-      $.post('/sketchpad', onLogin(profile));
+      $.getJSON(url, onStart());
     }
   });
 });
