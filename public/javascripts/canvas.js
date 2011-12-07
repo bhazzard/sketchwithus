@@ -48,11 +48,17 @@ define(['artist', 'toolbox', 'graphics', 'proxy', 'remote_graphics'], function(A
       mouseenter: $.proxy(this, 'mouseenter'),
       mousemove: $.proxy(this, 'mousemove'),
       mouseup: $.proxy(this, 'mouseup'),
-      mouseout: $.proxy(this, 'mouseout')
+      mouseout: $.proxy(this, 'mouseout'),
+      touchstart: $.proxy(this, 'touchstart'),
+      touchmove: $.proxy(this, 'touchmove'),
+      touchend: $.proxy(this, 'touchend')
     });
     
     $(document).bind({
-      mouseup: $.proxy(this, 'mouseup')
+      mouseup: $.proxy(this, 'mouseup'),
+      touchmove: function(event) {
+        event.preventDefault();
+      }
     });
 
     canvas.onselectstart = function() { return false; };
@@ -99,6 +105,27 @@ define(['artist', 'toolbox', 'graphics', 'proxy', 'remote_graphics'], function(A
       y = event.pageY - this._offsetY;
     
     this._artist.mouseenter(x, y);
+  };
+
+  Canvas.prototype.touchstart = function(event) {
+    var x = event.targetTouches[0].pageX - this._offsetX,
+      y = event.targetTouches[0].pageY - this._offsetY;
+    
+    this._artist.mousedown(x, y);
+  };
+
+  Canvas.prototype.touchmove = function(event) {
+    var x = event.targetTouches[0].pageX - this._offsetX,
+      y = event.targetTouches[0].pageY - this._offsetY;
+    
+    this._artist.mousemove(x, y);
+  };
+
+  Canvas.prototype.touchend = function(event) {
+    var x = event.targetTouches[0].pageX - this._offsetX,
+      y = event.targetTouches[0].pageY - this._offsetY;
+    
+    this._artist.mouseup(x, y);
   };
 
   return Canvas;
