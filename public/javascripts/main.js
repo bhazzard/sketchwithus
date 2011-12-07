@@ -9,7 +9,7 @@ require(['canvas'], function(Canvas, Chat) {
 
       socket.on('login', function(artists) {
         _.each(artists, function(artist) {
-          console.log(artist);
+          $('body').trigger('artist', artist);
         });
       });
 
@@ -18,6 +18,7 @@ require(['canvas'], function(Canvas, Chat) {
       $(window).resize(function() {
         canvas.calculateOffsets();
       });
+
     };
   };
 
@@ -42,7 +43,7 @@ require(['canvas'], function(Canvas, Chat) {
     });
   });
 
-  $('#login').bind('recievedLogin', function(event, artist){
+  $('body').bind('artist', function(event, artist){
     var template = _.template($("#artist-template").html()),
       artists = $('.artists');
     if (!artists.length) {
