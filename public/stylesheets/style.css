@@ -54,6 +54,10 @@ body > #container { height: auto; min-height: 100%; }
   border: 1px solid black;
 }
 
+#sketch,canvas {
+  -webkit-user-select: none;
+}
+
 #welcome {
   padding: 50px;
 }

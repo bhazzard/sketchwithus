@@ -48,17 +48,18 @@ define(['artist', 'toolbox', 'graphics', 'proxy', 'remote_graphics'], function(A
       mouseenter: $.proxy(this, 'mouseenter'),
       mousemove: $.proxy(this, 'mousemove'),
       mouseup: $.proxy(this, 'mouseup'),
-      mouseout: $.proxy(this, 'mouseout'),
-      touchstart: $.proxy(this, 'touchstart'),
-      touchmove: $.proxy(this, 'touchmove'),
-      touchend: $.proxy(this, 'touchend')
+      mouseout: $.proxy(this, 'mouseout')
     });
+
+    if (canvas.addEventListener) {
+      canvas.addEventListener('touchstart', $.proxy(this, 'touchevent'), false);
+      canvas.addEventListener('touchmove', $.proxy(this, 'touchevent'), false);
+      canvas.addEventListener('touchend', $.proxy(this, 'touchevent'), false);
+      canvas.addEventListener('touchcancel', $.proxy(this, 'touchevent'), false);
+    }
     
     $(document).bind({
-      mouseup: $.proxy(this, 'mouseup'),
-      touchmove: function(event) {
-        event.preventDefault();
-      }
+      mouseup: $.proxy(this, 'mouseup')
     });
 
     canvas.onselectstart = function() { return false; };
@@ -107,25 +108,29 @@ define(['artist', 'toolbox', 'graphics', 'proxy', 'remote_graphics'], function(A
     this._artist.mouseenter(x, y);
   };
 
-  Canvas.prototype.touchstart = function(event) {
-    var x = event.targetTouches[0].pageX - this._offsetX,
-      y = event.targetTouches[0].pageY - this._offsetY;
-    
-    this._artist.mousedown(x, y);
-  };
+  Canvas.prototype.touchevent = function(event) {
+    var touches = event.changedTouches,
+      first = touches[0],
+      eventMap = {
+        touchstart: 'mousedown',
+        touchmove: 'mousemove',
+        touchend: 'mouseup'
+      },
+      type = eventMap[event.type];
 
-  Canvas.prototype.touchmove = function(event) {
-    var x = event.targetTouches[0].pageX - this._offsetX,
-      y = event.targetTouches[0].pageY - this._offsetY;
-    
-    this._artist.mousemove(x, y);
-  };
+    if (!type) {
+      return;
+    }
 
-  Canvas.prototype.touchend = function(event) {
-    var x = event.targetTouches[0].pageX - this._offsetX,
-      y = event.targetTouches[0].pageY - this._offsetY;
-    
-    this._artist.mouseup(x, y);
+    var simulatedEvent = document.createEvent("MouseEvent");
+    simulatedEvent.initMouseEvent(type, true, true, window, 1,
+      first.screenX, first.screenY,
+      first.clientX, first.clientY, false,
+      false, false, false, 0, null);
+
+    first.target.dispatchEvent(simulatedEvent);
+
+    event.preventDefault();
   };
 
   return Canvas;
