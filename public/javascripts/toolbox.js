@@ -21,6 +21,10 @@ define(function() {
 
     this._toolbox.html(_.template($('#toolbox-template').html()));
 
+    this._toolbox.delegate('.pen', 'click', function(){
+      self.artist.setColor(self._color || "#000000");
+    });
+
     this._toolbox.delegate('.eraser', 'click', function(){
       self.artist.setColor("#FFFFFF");
     });
@@ -31,6 +35,7 @@ define(function() {
 
     this._colorstrip.colorstrip(function(hex) {
       self.artist.setColor(hex);
+      self._color = hex;
       $('.color', self._toolbox).css('background-color', hex);
     });
   };
