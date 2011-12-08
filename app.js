@@ -2,6 +2,7 @@
  * Module dependencies.
  */
 var express = require('express'),
+    requirejs = require('requirejs'),
     app = module.exports = express.createServer(),
     io = require('socket.io').listen(app),
     argv = require('optimist').argv,
@@ -26,6 +27,20 @@ app.configure('development', function(){
 });
 
 app.configure('production', function(){
+  // Ensure the javascript has been minified
+  requirejs.optimize({
+    appDir: "public/",
+    baseUrl: "javascripts",
+    dir: "public_build",
+    modules: [
+      {
+        name: "main"
+      }
+    ]
+  }, function() {
+    console.log('Successfully optimized javascript');
+  });
+
   app.use(express.errorHandler()); 
   app.use(express.static(__dirname + '/public_build'));
 });
