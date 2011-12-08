@@ -64,6 +64,12 @@ cd sketchwithus
 npm install
 </pre>
 
+Compress the javascript:
+
+<pre>
+node build.js
+</pre>
+
 Run the app:
 
 <pre>

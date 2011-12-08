@@ -2,3 +2,4 @@ node_modules
 .vagrant
 sketchwithus.log
 *.swp
+public_build
