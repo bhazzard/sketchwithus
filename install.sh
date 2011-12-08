@@ -22,7 +22,7 @@ check host sketchwithus with address 127.0.0.1
     stop program  = "/sbin/stop sketchwithus"
     if failed port 8000 protocol HTTP
         request /
-        with timeout 15 seconds
+        with timeout 10 seconds
         then restart
 EOF
 ) > /etc/monit/conf.d/sketchwithus.conf
