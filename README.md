@@ -1,3 +1,7 @@
+> [!NOTE]
+> This was an HTML, javascript, and node.js implementation of a collaborative drawing app, back when websockets and webrtc were
+> new and novel technologies. It was written up in AppAdvice, an iOS focussed periodical: https://appadvice.com/appnn/2011/12/web-app-sketchwith-us-paints-with-friends-html
+
 # Setting up
 
 This guide is written assuming you are developing on Ubuntu. The first step is to install everything we need to run node.js:
